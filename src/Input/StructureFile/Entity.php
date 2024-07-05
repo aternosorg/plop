@@ -23,6 +23,8 @@ class Entity
             throw new InvalidArgumentException("Invalid Entity NBT data: " . $tag->toSNBT());
         }
 
+        $nbt->offsetUnset("UUID");
+
         return new static(
             $id,
             $pos[0]->getValue(),
