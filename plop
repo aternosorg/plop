@@ -5,7 +5,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $inputPath = $argv[1];
 
-$plop = new \Aternos\Plop\Plop(\Aternos\Plop\Input\StructureFile\StructureFile::loadFile($inputPath), functionName: 'plop:silo');
+$plop = new \Aternos\Plop\Plop(
+    input: \Aternos\Plop\Input\StructureFile\StructureFile::loadFile($inputPath),
+    functionName: 'plop:silo',
+    placementStrategy: new \Aternos\Plop\Placement\RandomPlacementStrategy()
+);
 $plop->generate();
 
 echo $plop->getOutput()->getAsString();

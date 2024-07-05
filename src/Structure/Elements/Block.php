@@ -40,12 +40,12 @@ class Block extends Element
         return $this->nbt ?? "";
     }
 
-    public function getCommands(string $startIf, string $prefix): array
+    public function getCommands(string $prefix): ElementCommandList
     {
         if ($this->animation !== null) {
-            return $this->animation->getBlockCommands($this, $startIf, $prefix);
+            return $this->animation->getBlockCommands($this, $prefix);
         }
-        return ["execute " . $startIf . " run setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()];
+        return new ElementCommandList(["setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()]);
     }
 
     public function isAir(): bool

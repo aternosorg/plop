@@ -28,15 +28,6 @@ class Plop
     {
         $this->getPlacementStrategy()->setStructure($this->structure);
         $this->getOutput()->setPlop($this)->generate();
-
-        $output = $this->getOutput();
-
-        $output->generateHeader();
-        foreach ($this->getPlacementStrategy()->getPlacements() as $placement) {
-            $this->getOutput()->addPlacement($placement);
-        }
-        $output->generateFooter();
-
         return $this;
     }
 

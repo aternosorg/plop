@@ -38,8 +38,9 @@ class MinecraftFunction extends Output
 
         $this
             ->add($headerPrefix . $this->createScoreboard($this->getMainScoreBoardName()))
+            ->add($headerPrefix . "scoreboard players set @e[tag=" . $this->getMainEntityTag() . "] " . $this->getMainScoreBoardName() . " 0")
             ->add($headerPrefix . $this->createScoreboard($this->getBlockEntityScoreBoardName()))
-            ->add($headerPrefix . 'summon minecraft:marker ~ ~ ~ {Tags:["' . $this->getMainEntityTag() . '"]}')
+            ->add($headerPrefix . 'execute align xyz run summon minecraft:marker ~ ~ ~ {Tags:["' . $this->getMainEntityTag() . '"]}')
             ->doubleLineBreak();
 
         return $this;
@@ -48,25 +49,34 @@ class MinecraftFunction extends Output
     public function addPlacement(Placement $placement): static
     {
         foreach ($placement->getElements() as $element) {
-            $startIf = 'if score @e[tag=' . $this->getMainEntityTag() . ',limit=1] ' . $this->getMainScoreBoardName() . ' matches ' . $placement->getTick();
-            $this->function .= implode(PHP_EOL, $element->getCommands($startIf, $this->plop->getPrefix())) . PHP_EOL . PHP_EOL;
+            $asEntity = 'execute as @e[tag=' . $this->getMainEntityTag() . '] at @s ';
+            $startIf = 'if score @s ' . $this->getMainScoreBoardName() . ' matches ' . $placement->getTick() . ' ';
+
+            $commandList = $element->getCommands($this->plop->getPrefix());
+            foreach ($commandList->getStartCommands() as $command) {
+                $this->add($asEntity . $startIf . "run " . $command);
+            }
+            foreach ($commandList->getRunCommands() as $command) {
+                $this->add($asEntity . "run " . $command);
+            }
+            $this->lineBreak();
         }
         return $this;
     }
 
     public function generateFooter(): static
     {
-        $footerRunningPrefix = 'execute if entity @e[tag=' . $this->getMainEntityTag() . '] run ';
-        $footerEndedPrefix = 'execute unless entity @e[tag=' . $this->getMainEntityTag() . '] run ';
+        $footerRunningPrefix = 'execute if entity @e[tag=' . $this->getMainEntityTag() . ',tag=!' . $this->getFinishedEntityTag() . '] run ';
+        $footerEndedPrefix = 'execute if entity @e[tag=' . $this->getMainEntityTag() . ',tag=' . $this->getFinishedEntityTag() . '] run ';
 
         $this->lineBreak()
-            ->add('execute unless entity @e[tag=' . $this->getBlockEntityTag() . '] if score @e[tag=' . $this->getMainEntityTag() . ',limit=1] ' . $this->getMainScoreBoardName() . ' matches ' . $this->getMaxTick() . '.. run kill @e[tag=' . $this->getMainEntityTag() . ']')
+            ->add('execute unless entity @e[tag=' . $this->getBlockEntityTag() . '] if score @e[tag=' . $this->getMainEntityTag() . ',limit=1] ' . $this->getMainScoreBoardName() . ' matches ' . $this->getMaxTick() . '.. run tag @e[tag=' . $this->getMainEntityTag() . '] add ' . $this->getFinishedEntityTag())
             ->add($footerRunningPrefix . 'scoreboard players add @e[tag=' . $this->getMainEntityTag() . '] ' . $this->getMainScoreBoardName() . ' 1')
             ->add($footerRunningPrefix . 'scoreboard players add @e[tag=' . $this->getBlockEntityTag() . '] ' . $this->getBlockEntityScoreBoardName() . ' 1')
+            ->add($footerRunningPrefix . 'schedule function ' . $this->plop->getFunctionName() . ' 1t')
             ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getMainScoreBoardName())
             ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getBlockEntityScoreBoardName())
-            ->lineBreak()
-            ->add($footerRunningPrefix . 'schedule function ' . $this->plop->getFunctionName() . ' 1t');
+            ->add($footerEndedPrefix. 'kill @e[tag=' . $this->getMainEntityTag() . ']');
 
         return $this;
     }
@@ -104,6 +114,11 @@ class MinecraftFunction extends Output
     protected function getMainEntityTag(): string
     {
         return $this->plop->getPrefix() . "main";
+    }
+
+    protected function getFinishedEntityTag(): string
+    {
+        return $this->plop->getPrefix() . "finished";
     }
 
     protected function getMainScoreBoardName(): string
