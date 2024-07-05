@@ -2,7 +2,6 @@
 
 namespace Aternos\Plop\Output;
 
-use Aternos\Plop\Placement\Placement;
 use Aternos\Plop\Plop;
 
 abstract class Output
@@ -11,16 +10,12 @@ abstract class Output
 
     abstract public function getAsString(): string;
 
-    abstract public function addPlacement(Placement $placement): static;
+    abstract public function generate(): static;
 
     public function save(string $path): bool
     {
         return file_put_contents($path, $this->getAsString()) !== false;
     }
-
-    abstract public function generateHeader(): static;
-
-    abstract public function generateFooter(): static;
 
     /**
      * @param Plop $plop

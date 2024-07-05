@@ -27,9 +27,9 @@ class Plop
     public function generate(): static
     {
         $this->getPlacementStrategy()->setStructure($this->structure);
+        $this->getOutput()->setPlop($this)->generate();
 
         $output = $this->getOutput();
-        $output->setPlop($this);
 
         $output->generateHeader();
         foreach ($this->getPlacementStrategy()->getPlacements() as $placement) {
