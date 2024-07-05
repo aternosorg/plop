@@ -13,7 +13,8 @@ class AxisPlacementStrategy extends PlacementStrategy
         protected AxisStrategy $strategy = AxisStrategy::ASCENDING,
         protected ?AxisStrategy $x = null,
         protected ?AxisStrategy $y = null,
-        protected ?AxisStrategy $z = null
+        protected ?AxisStrategy $z = null,
+        protected int $elementsPerTick = 1
     )
     {
     }
@@ -26,10 +27,30 @@ class AxisPlacementStrategy extends PlacementStrategy
             return $this->compareElements($a, $b);
         });
         $tick = 0;
+        $equalElements = [];
+        $placementElements = [];
         foreach ($elements as $element) {
-            $placements[] = new Placement([$element], $tick);
-            $tick++;
+            if (empty($equalElements)) {
+                $equalElements[] = $element;
+                continue;
+            }
+            if ($this->compareElements($equalElements[0], $element) === 0) {
+                $equalElements[] = $element;
+                continue;
+            }
+
+            shuffle($equalElements);
+            foreach ($equalElements as $equalElement) {
+                $placementElements[] = $equalElement;
+                if (count($placementElements) >= $this->elementsPerTick) {
+                    $placements[] = new Placement($placementElements, $tick);
+                    $placementElements = [];
+                    $tick++;
+                }
+            }
+            $equalElements = [$element];
         }
+        $placements[] = new Placement(array_merge($placementElements, $equalElements), $tick);
         return $placements;
     }
 
@@ -40,8 +61,7 @@ class AxisPlacementStrategy extends PlacementStrategy
             $strategy = match ($axis) {
                 Axis::X => $this->getXStrategy(),
                 Axis::Y => $this->getYStrategy(),
-                Axis::Z => $this->getZStrategy(),
-                default => $this->strategy,
+                Axis::Z => $this->getZStrategy()
             };
             $result = $this->compareOnAxis($strategy, $a->getAxis($axis), $b->getAxis($axis));
             if ($result !== 0) {
@@ -56,7 +76,6 @@ class AxisPlacementStrategy extends PlacementStrategy
         return match ($strategy) {
             AxisStrategy::ASCENDING => $a <=> $b,
             AxisStrategy::DESCENDING => $b <=> $a,
-            AxisStrategy::RANDOM => rand(-1, 1),
             default => 0,
         };
 

@@ -7,5 +7,4 @@ enum AxisStrategy
     case ASCENDING;
     case DESCENDING;
     case RANDOM;
-    case FULL;
 }

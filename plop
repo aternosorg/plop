@@ -8,7 +8,11 @@ $inputPath = $argv[1];
 $plop = new \Aternos\Plop\Plop(
     input: \Aternos\Plop\Input\StructureFile\StructureFile::loadFile($inputPath),
     functionName: 'plop:silo',
-    placementStrategy: new \Aternos\Plop\Placement\AxisPlacementStrategy()
+    placementStrategy: new \Aternos\Plop\Placement\AxisPlacementStrategy(
+        x: \Aternos\Plop\Placement\Util\AxisStrategy::RANDOM,
+        z: \Aternos\Plop\Placement\Util\AxisStrategy::RANDOM,
+        elementsPerTick: 2
+    ),
 );
 $plop->generate();
 
