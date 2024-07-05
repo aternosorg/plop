@@ -89,9 +89,9 @@ class StructureFile extends Input
      * @param int $sizeX
      * @param int $sizeY
      * @param int $sizeZ
-     * @param array $blocks
+     * @param Block[] $blocks
      * @param Palette $palette
-     * @param array $entities
+     * @param Entity[] $entities
      */
     public function __construct(
         protected int $sizeX,
@@ -104,8 +104,32 @@ class StructureFile extends Input
     {
     }
 
+    /**
+     * @return Structure
+     */
     public function getStructure(): Structure
     {
-        // TODO: Implement getStructure() method.
+        $structure = new Structure($this->sizeX, $this->sizeY, $this->sizeZ);
+
+        foreach ($this->blocks as $block) {
+            $structure->addElement(new \Aternos\Plop\Structure\Elements\Block(
+                $block->getState()->getName(),
+                $block->getX(),
+                $block->getY(),
+                $block->getZ(),
+                $block->getState()->getProperties() ?? []
+            ));
+        }
+
+        foreach ($this->entities as $entity) {
+            $structure->addElement(new \Aternos\Plop\Structure\Elements\Entity(
+                $entity->getId(),
+                $entity->getX(),
+                $entity->getY(),
+                $entity->getZ()
+            ));
+        }
+
+        return $structure;
     }
 }
