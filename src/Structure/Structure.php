@@ -1,5 +1,9 @@
 <?php
 
+namespace Aternos\Plop\Structure;
+
+use Aternos\Plop\Structure\Elements\Element;
+
 class Structure
 {
     protected array $elements = [];

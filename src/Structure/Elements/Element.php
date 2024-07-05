@@ -1,5 +1,6 @@
 <?php
 
+namespace Aternos\Plop\Structure\Elements;
 class Element
 {
     public function __construct(
