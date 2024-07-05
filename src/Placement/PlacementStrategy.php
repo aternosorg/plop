@@ -8,7 +8,10 @@ abstract class PlacementStrategy
 {
     protected Structure $structure;
 
-    abstract public function getNext(): ?Placement;
+    /**
+     * @return Placement[]
+     */
+    abstract public function getPlacements(): array;
 
     /**
      * @param Structure $structure

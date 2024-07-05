@@ -6,16 +6,20 @@ use Aternos\Plop\Structure\Elements\Block;
 
 class FullPlacementStrategy extends PlacementStrategy
 {
-    protected bool $placed = false;
     protected bool $ignoreAir = true;
 
-    public function getNext(): ?Placement
+    /**
+     * @param bool $ignoreAir
+     * @return $this
+     */
+    public function setIgnoreAir(bool $ignoreAir = true): static
     {
-        if ($this->placed) {
-            return null;
-        }
-        $this->placed = true;
+        $this->ignoreAir = $ignoreAir;
+        return $this;
+    }
 
+    public function getPlacements(): array
+    {
         $placement = new Placement();
         foreach ($this->structure->getElements() as $element) {
             if (!$element instanceof Block) {
@@ -27,16 +31,6 @@ class FullPlacementStrategy extends PlacementStrategy
             }
             $placement->addElement($element);
         }
-        return $placement;
-    }
-
-    /**
-     * @param bool $ignoreAir
-     * @return $this
-     */
-    public function setIgnoreAir(bool $ignoreAir = true): static
-    {
-        $this->ignoreAir = $ignoreAir;
-        return $this;
+        return [$placement];
     }
 }

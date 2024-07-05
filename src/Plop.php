@@ -26,7 +26,7 @@ class Plop
     {
         $this->getPlacementStrategy()->setStructure($this->structure);
 
-        while ($placement = $this->getPlacementStrategy()->getNext()) {
+        foreach ($this->getPlacementStrategy()->getPlacements() as $placement) {
             $this->getOutput()->addPlacement($placement);
         }
 
