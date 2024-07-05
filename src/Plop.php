@@ -15,8 +15,10 @@ class Plop
 
     public function __construct(
         protected Input $input,
+        protected string $functionName = "plop:plop",
         protected ?PlacementStrategy $placementStrategy = null,
-        protected ?Output $output = null
+        protected ?Output $output = null,
+        protected ?string $tagPrefix = null
     )
     {
         $this->structure = $input->getStructure();
@@ -25,6 +27,7 @@ class Plop
     public function generate(): static
     {
         $this->getPlacementStrategy()->setStructure($this->structure);
+        $this->getOutput()->setPlop($this);
 
         foreach ($this->getPlacementStrategy()->getPlacements() as $placement) {
             $this->getOutput()->addPlacement($placement);
@@ -62,5 +65,31 @@ class Plop
     public function getOutput(): ?Output
     {
         return $this->output ?? $this->output = new MinecraftFunction();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFunctionName(): string
+    {
+        return $this->functionName;
+    }
+
+    public function getTagPrefix(): string
+    {
+        if (!$this->tagPrefix) {
+            $this->tagPrefix = "plop_" . str_replace(":", "_", $this->functionName) . "_";
+        }
+        return $this->tagPrefix;
+    }
+
+    /**
+     * @param string|null $tagPrefix
+     * @return $this
+     */
+    public function setTagPrefix(?string $tagPrefix): static
+    {
+        $this->tagPrefix = $tagPrefix;
+        return $this;
     }
 }

@@ -39,5 +39,5 @@ abstract class Element
         return "~" . $this->x . " ~" . $this->y . " ~" . $this->z;
     }
 
-    abstract public function getCommands(string $startIf): array;
+    abstract public function getCommands(string $startIf, string $tagPrefix): array;
 }

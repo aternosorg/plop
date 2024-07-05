@@ -16,7 +16,7 @@ class MinecraftFunction extends Output
     public function addPlacement(Placement $placement): static
     {
         foreach ($placement->getElements() as $element) {
-            $this->function .= implode(PHP_EOL, $element->getCommands("")) . PHP_EOL . PHP_EOL;
+            $this->function .= implode(PHP_EOL, $element->getCommands("", $this->plop->getTagPrefix())) . PHP_EOL . PHP_EOL;
         }
         return $this;
     }
