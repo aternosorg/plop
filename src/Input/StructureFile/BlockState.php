@@ -16,7 +16,7 @@ class BlockState
     {
         $name = $tag->getString("Name")?->getValue();
         if (!is_string($name)) {
-            throw new InvalidArgumentException("Invalid BlockState NBT data");
+            throw new InvalidArgumentException("Invalid BlockState NBT data: " . $tag->toSNBT());
         }
 
         $properties = null;
@@ -24,7 +24,7 @@ class BlockState
             $properties = [];
             foreach ($props as $key => $value) {
                 if (!($value instanceof StringTag)) {
-                    throw new InvalidArgumentException("Invalid BlockState NBT data");
+                    throw new InvalidArgumentException("Invalid BlockState NBT data: " . $tag->toSNBT());
                 }
                 $properties[$key] = $value->getValue();
             }
