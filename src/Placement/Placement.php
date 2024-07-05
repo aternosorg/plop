@@ -8,9 +8,9 @@ class Placement
 {
     /**
      * @param Element[] $elements
-     * @param int $delay
+     * @param int $tick
      */
-    public function __construct(protected array $elements = [], protected int $delay = 0)
+    public function __construct(protected array $elements = [], protected int $tick = 0)
     {
     }
 
@@ -42,21 +42,14 @@ class Placement
         return $this->elements;
     }
 
-    /**
-     * @param int $delay
-     * @return $this
-     */
-    public function setDelay(int $delay): static
+    public function getTick(): int
     {
-        $this->delay = $delay;
-        return $this;
+        return $this->tick;
     }
 
-    /**
-     * @return int
-     */
-    public function getDelay(): int
+    public function setTick(int $tick): static
     {
-        return $this->delay;
+        $this->tick = $tick;
+        return $this;
     }
 }

@@ -4,8 +4,8 @@ namespace Aternos\Plop\Structure\Elements;
 
 class Entity extends Element
 {
-    public function getCommands(): array
+    public function getCommands(string $startIf): array
     {
-        return ["summon " . $this->getName() . " " . $this->getRelativeCoordinatesString() . " " . ($this->nbt ?? "")];
+        return ["execute " . $startIf . " run summon " . $this->getName() . " " . $this->getRelativeCoordinatesString() . " " . ($this->nbt ?? "")];
     }
 }

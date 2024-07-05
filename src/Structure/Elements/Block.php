@@ -31,9 +31,9 @@ class Block extends Element
         return $this->nbt ?? "";
     }
 
-    public function getCommands(): array
+    public function getCommands(string $startIf): array
     {
-        return ["setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()];
+        return ["execute " . $startIf . " run setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()];
     }
 
     public function isAir(): bool
