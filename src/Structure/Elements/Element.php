@@ -1,7 +1,8 @@
 <?php
 
 namespace Aternos\Plop\Structure\Elements;
-class Element
+
+abstract class Element
 {
     public function __construct(
         protected string  $name,
@@ -37,4 +38,6 @@ class Element
     {
         return "~" . $this->x . " ~" . $this->y . " ~" . $this->z;
     }
+
+    abstract public function getCommands(): array;
 }
