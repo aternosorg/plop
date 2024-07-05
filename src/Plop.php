@@ -24,8 +24,10 @@ class Plop
 
     public function generate(): static
     {
+        $this->getPlacementStrategy()->setStructure($this->structure);
+
         while ($placement = $this->getPlacementStrategy()->getNext()) {
-            $this->output->addPlacement($placement);
+            $this->getOutput()->addPlacement($placement);
         }
 
         return $this;

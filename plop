@@ -3,9 +3,9 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$inputPath = $argv[0];
+$inputPath = $argv[1];
 
-$plop = new \Aternos\Plop\Plop(new Aternos\Plop\Input\StructureFile\StructureFile($inputPath));
+$plop = new \Aternos\Plop\Plop(\Aternos\Plop\Input\StructureFile\StructureFile::loadFile($inputPath));
 $plop->generate();
 
 echo $plop->getOutput()->getAsString();

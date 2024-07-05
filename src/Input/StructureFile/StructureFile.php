@@ -21,6 +21,9 @@ class StructureFile extends Input
      */
     public static function loadFile(string $filename): static
     {
+        if (!file_exists($filename)) {
+            throw new InvalidArgumentException("File not found: $filename");
+        }
         $content = @file_get_contents($filename);
         if ($content === false) {
             throw new InvalidArgumentException("Failed to read file: $filename");
@@ -117,7 +120,8 @@ class StructureFile extends Input
                 $block->getX(),
                 $block->getY(),
                 $block->getZ(),
-                $block->getState()->getProperties() ?? []
+                $block->getState()->getProperties() ?? [],
+                $block->getNbt()?->toSNBT()
             ));
         }
 
