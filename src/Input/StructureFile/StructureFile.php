@@ -120,8 +120,8 @@ class StructureFile extends Input
                 $block->getX(),
                 $block->getY(),
                 $block->getZ(),
-                $block->getState()->getProperties() ?? [],
-                $block->getNbt()?->toSNBT()
+                $block->getNbt()?->toSNBT(),
+                $block->getState()->getProperties() ?? []
             ));
         }
 
@@ -130,7 +130,8 @@ class StructureFile extends Input
                 $entity->getId(),
                 $entity->getX(),
                 $entity->getY(),
-                $entity->getZ()
+                $entity->getZ(),
+                $entity->getNbt()?->toSNBT()
             ));
         }
 

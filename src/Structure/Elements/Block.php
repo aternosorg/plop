@@ -8,9 +8,9 @@ class Block extends Element
 {
     protected ?Animation $animation = null;
 
-    public function __construct(string $name, float $x, float $y, float $z, protected array $state = [], protected ?string $nbt = null)
+    public function __construct(string $name, float $x, float $y, float $z, ?string $nbt = null, protected array $state = [])
     {
-        parent::__construct($name, $x, $y, $z);
+        parent::__construct($name, $x, $y, $z, $nbt);
     }
 
     public function getStateString(): string

@@ -19,6 +19,7 @@ class FullPlacementStrategy extends PlacementStrategy
         $placement = new Placement();
         foreach ($this->structure->getElements() as $element) {
             if (!$element instanceof Block) {
+                $placement->addElement($element);
                 continue;
             }
             if ($this->ignoreAir && $element->isAir()) {
