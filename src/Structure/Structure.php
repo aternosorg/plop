@@ -20,4 +20,9 @@ class Structure
     {
         $this->elements[] = $element;
     }
+
+    public function getElements(): array
+    {
+        return $this->elements;
+    }
 }

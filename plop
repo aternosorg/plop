@@ -1,0 +1,11 @@
+#!/usr/bin/php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$inputPath = $argv[0];
+
+$plop = new \Aternos\Plop\Plop(new Aternos\Plop\Input\StructureFile\StructureFile($inputPath));
+$plop->generate();
+
+echo $plop->getOutput()->getAsString();

@@ -15,10 +15,19 @@ class Block extends Element
 
     public function getStateString(): string
     {
+        if (empty($this->state)) {
+            return "";
+        }
+
         $states = [];
         foreach ($this->state as $key => $value) {
             $states[] = $key . "=" . $value;
         }
         return "[" . implode(",", $states) . "]";
+    }
+
+    public function getSetBlockCommand(): string
+    {
+        return "setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString();
     }
 }
