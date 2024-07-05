@@ -1,0 +1,20 @@
+{
+    "name": "aternos/plop",
+    "description": "Plop Minecraft structures into existence",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Aternos\\Plop\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matthias Neid",
+            "email": "matthias@aternos.org"
+        }
+    ],
+    "require": {
+        "aternos/nbt": "^1.10"
+    }
+}
