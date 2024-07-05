@@ -38,9 +38,9 @@ class MinecraftFunction extends Output
 
         $this
             ->add($headerPrefix . $this->createScoreboard($this->getMainScoreBoardName()))
-            ->add($headerPrefix . "scoreboard players set @e[tag=" . $this->getMainEntityTag() . "] " . $this->getMainScoreBoardName() . " 0")
             ->add($headerPrefix . $this->createScoreboard($this->getBlockEntityScoreBoardName()))
             ->add($headerPrefix . 'execute align xyz run summon minecraft:marker ~ ~ ~ {Tags:["' . $this->getMainEntityTag() . '"]}')
+            ->add("execute as @e[tag=" . $this->getMainEntityTag() . "] unless score @s " . $this->getMainScoreBoardName() . " matches 0.. run scoreboard players set @s " . $this->getMainScoreBoardName() . " 0")
             ->doubleLineBreak();
 
         return $this;

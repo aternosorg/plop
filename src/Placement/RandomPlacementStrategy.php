@@ -6,22 +6,28 @@ use Aternos\Plop\Structure\Elements\Block;
 
 class RandomPlacementStrategy extends PlacementStrategy
 {
+    public function __construct(protected int $elementsPerTick = 1)
+    {
+    }
+
     /**
      * @inheritDoc
      */
     public function getPlacements(): array
     {
-        $elements = $this->structure->getElements();
+        $elements = $this->getElements();
         shuffle($elements);
 
         $placements = [];
-        $i = 0;
+        $tick = 0;
+        $elementsInTick = 0;
         foreach ($elements as $element) {
-            if ($element instanceof Block && $element->isAir()) {
-                continue;
+            $placements[] = new Placement([$element], $tick);
+            $elementsInTick++;
+            if ($elementsInTick >= $this->elementsPerTick) {
+                $elementsInTick = 0;
+                $tick++;
             }
-            $placements[] = new Placement([$element], $i);
-            $i++;
         }
         return $placements;
     }

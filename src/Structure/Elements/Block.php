@@ -3,6 +3,7 @@
 namespace Aternos\Plop\Structure\Elements;
 
 use Aternos\Plop\Animation\Animation;
+use Aternos\Plop\Animation\PlopAnimation;
 
 class Block extends Element
 {
@@ -12,6 +13,7 @@ class Block extends Element
     public function __construct(string $name, float $x, float $y, float $z, ?string $nbt = null, protected array $state = [])
     {
         parent::__construct($name, $x, $y, $z, $nbt);
+        $this->animation = new PlopAnimation();
     }
 
     /**
@@ -51,5 +53,15 @@ class Block extends Element
     public function isAir(): bool
     {
         return $this->getName() === "minecraft:air";
+    }
+
+    /**
+     * @param Animation|null $animation
+     * @return $this
+     */
+    public function setAnimation(?Animation $animation): static
+    {
+        $this->animation = $animation;
+        return $this;
     }
 }

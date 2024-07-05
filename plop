@@ -8,7 +8,7 @@ $inputPath = $argv[1];
 $plop = new \Aternos\Plop\Plop(
     input: \Aternos\Plop\Input\StructureFile\StructureFile::loadFile($inputPath),
     functionName: 'plop:silo',
-    placementStrategy: new \Aternos\Plop\Placement\RandomPlacementStrategy()
+    placementStrategy: new \Aternos\Plop\Placement\AxisPlacementStrategy()
 );
 $plop->generate();
 

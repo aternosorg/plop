@@ -2,6 +2,8 @@
 
 namespace Aternos\Plop\Structure\Elements;
 
+use Aternos\Plop\Placement\Util\Axis;
+
 abstract class Element
 {
     public function __construct(
@@ -17,6 +19,15 @@ abstract class Element
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getAxis(Axis $axis): float
+    {
+        return match ($axis) {
+            Axis::X => $this->x,
+            Axis::Y => $this->y,
+            Axis::Z => $this->z,
+        };
     }
 
     public function getX(): float
