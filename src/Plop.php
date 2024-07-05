@@ -27,11 +27,15 @@ class Plop
     public function generate(): static
     {
         $this->getPlacementStrategy()->setStructure($this->structure);
-        $this->getOutput()->setPlop($this);
 
+        $output = $this->getOutput();
+        $output->setPlop($this);
+
+        $output->generateHeader();
         foreach ($this->getPlacementStrategy()->getPlacements() as $placement) {
             $this->getOutput()->addPlacement($placement);
         }
+        $output->generateFooter();
 
         return $this;
     }

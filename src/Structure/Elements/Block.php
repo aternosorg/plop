@@ -6,6 +6,7 @@ use Aternos\Plop\Animation\Animation;
 
 class Block extends Element
 {
+    const string TAG = "block";
     protected ?Animation $animation = null;
 
     public function __construct(string $name, float $x, float $y, float $z, ?string $nbt = null, protected array $state = [])

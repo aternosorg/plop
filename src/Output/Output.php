@@ -18,6 +18,10 @@ abstract class Output
         return file_put_contents($path, $this->getAsString()) !== false;
     }
 
+    abstract public function generateHeader(): static;
+
+    abstract public function generateFooter(): static;
+
     /**
      * @param Plop $plop
      * @return $this
