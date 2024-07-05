@@ -18,7 +18,7 @@ class Plop
         protected string $functionName = "plop:plop",
         protected ?PlacementStrategy $placementStrategy = null,
         protected ?Output $output = null,
-        protected ?string $tagPrefix = null
+        protected ?string $prefix = null
     )
     {
         $this->structure = $input->getStructure();
@@ -75,21 +75,21 @@ class Plop
         return $this->functionName;
     }
 
-    public function getTagPrefix(): string
+    public function getPrefix(): string
     {
-        if (!$this->tagPrefix) {
-            $this->tagPrefix = "plop_" . str_replace(":", "_", $this->functionName) . "_";
+        if (!$this->prefix) {
+            $this->prefix = "plop_" . str_replace(":", "_", $this->functionName) . "_";
         }
-        return $this->tagPrefix;
+        return $this->prefix;
     }
 
     /**
-     * @param string|null $tagPrefix
+     * @param string|null $prefix
      * @return $this
      */
-    public function setTagPrefix(?string $tagPrefix): static
+    public function setPrefix(?string $prefix): static
     {
-        $this->tagPrefix = $tagPrefix;
+        $this->prefix = $prefix;
         return $this;
     }
 }

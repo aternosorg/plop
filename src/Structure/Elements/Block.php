@@ -31,7 +31,7 @@ class Block extends Element
         return $this->nbt ?? "";
     }
 
-    public function getCommands(string $startIf, string $tagPrefix): array
+    public function getCommands(string $startIf, string $prefix): array
     {
         return ["execute " . $startIf . " run setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()];
     }
