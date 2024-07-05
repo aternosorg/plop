@@ -14,6 +14,14 @@ class Block extends Element
         parent::__construct($name, $x, $y, $z, $nbt);
     }
 
+    /**
+     * @return array
+     */
+    public function getState(): array
+    {
+        return $this->state;
+    }
+
     public function getStateString(): string
     {
         if (empty($this->state)) {
@@ -34,6 +42,9 @@ class Block extends Element
 
     public function getCommands(string $startIf, string $prefix): array
     {
+        if ($this->animation !== null) {
+            return $this->animation->getBlockCommands($this, $startIf, $prefix);
+        }
         return ["execute " . $startIf . " run setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()];
     }
 
