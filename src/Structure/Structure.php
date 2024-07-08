@@ -2,7 +2,9 @@
 
 namespace Aternos\Plop\Structure;
 
+use Aternos\Plop\Animation\Animation;
 use Aternos\Plop\Placement\Util\Axis;
+use Aternos\Plop\Structure\Elements\AnimatableElement;
 use Aternos\Plop\Structure\Elements\Element;
 
 class Structure
@@ -51,5 +53,13 @@ class Structure
         };
     }
 
-
+    public function setDefaultAnimation(?Animation $animation = null): static
+    {
+        foreach ($this->getElements() as $element) {
+            if ($element instanceof AnimatableElement) {
+                $element->setAnimation($animation);
+            }
+        }
+        return $this;
+    }
 }

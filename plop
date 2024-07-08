@@ -1,19 +1,5 @@
 #!/usr/bin/php
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-$inputPath = $argv[1];
-
-$plop = new \Aternos\Plop\Plop(
-    input: \Aternos\Plop\Input\StructureFile\StructureFile::loadFile($inputPath),
-    functionName: 'plop:silo',
-    placementStrategy: new \Aternos\Plop\Placement\AxisPlacementStrategy(
-        x: \Aternos\Plop\Placement\Util\AxisStrategy::RANDOM,
-        z: \Aternos\Plop\Placement\Util\AxisStrategy::RANDOM,
-        elementsPerTick: 2
-    ),
-);
-$plop->generate();
-
-echo $plop->getOutput()->getAsString();
+const ARGUMENTS_START = 1;
+require_once 'plop.php';

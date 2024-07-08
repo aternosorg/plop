@@ -3,17 +3,14 @@
 namespace Aternos\Plop\Structure\Elements;
 
 use Aternos\Plop\Animation\Animation;
-use Aternos\Plop\Animation\PlopAnimation;
 
-class Block extends Element
+class Block extends AnimatableElement
 {
     const string TAG = "block";
-    protected ?Animation $animation = null;
 
     public function __construct(string $name, float $x, float $y, float $z, ?string $nbt = null, protected array $state = [])
     {
         parent::__construct($name, $x, $y, $z, $nbt);
-        $this->animation = new PlopAnimation();
     }
 
     /**

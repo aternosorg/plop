@@ -2,6 +2,7 @@
 
 namespace Aternos\Plop;
 
+use Aternos\Plop\Animation\Animation;
 use Aternos\Plop\Input\Input;
 use Aternos\Plop\Output\MinecraftFunction;
 use Aternos\Plop\Output\Output;
@@ -18,10 +19,12 @@ class Plop
         protected string $functionName = "plop:plop",
         protected ?PlacementStrategy $placementStrategy = null,
         protected ?Output $output = null,
-        protected ?string $prefix = null
+        protected ?string $prefix = null,
+        protected ?Animation $defaultAnimation = null
     )
     {
         $this->structure = $input->getStructure();
+        $this->structure->setDefaultAnimation($defaultAnimation);
     }
 
     public function generate(): static
@@ -85,6 +88,17 @@ class Plop
     public function setPrefix(?string $prefix): static
     {
         $this->prefix = $prefix;
+        return $this;
+    }
+
+    /**
+     * @param Animation|null $defaultAnimation
+     * @return $this
+     */
+    public function setDefaultAnimation(?Animation $defaultAnimation): static
+    {
+        $this->defaultAnimation = $defaultAnimation;
+        $this->structure->setDefaultAnimation($defaultAnimation);
         return $this;
     }
 }
