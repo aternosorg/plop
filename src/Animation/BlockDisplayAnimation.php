@@ -30,7 +30,7 @@ abstract class BlockDisplayAnimation extends Animation
         ];
 
         return new ElementCommandList([
-            'summon minecraft:block_display ~' . number_format($x, 1) . ' ~' . number_format($y, 1) . ' ~' . number_format($z, 1) . ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration . ',Tags:' . json_encode($tags) . ',transformation:' . $this->getInitialTransform() . ',block_state:{Name:' . json_encode($block->getName()) . ', Properties:' . json_encode($block->getState()) . '}}'
+            'summon minecraft:block_display ~' . number_format($x, 1) . ' ~' . number_format($y, 1) . ' ~' . number_format($z, 1) . ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration . ',Tags:' . json_encode($tags) . ',transformation:' . $this->getInitialTransform($block) . ',block_state:{Name:' . json_encode($block->getName()) . ', Properties:' . json_encode($block->getState()) . '}}'
         ], [
             'execute as @e[tag=' . $tag . ',scores={' . $objective . '=1}] run data merge entity @s {start_interpolation:0,transformation:{translation:[0f,0f,0f],scale:[0.999f,0.999f,0.999f]}}',
             'execute as @e[tag=' . $tag . ',scores={' . $objective . '=' . $this->animationDuration . '..}] run setblock ' . $block->getRelativeCoordinatesString() . " " . $block->getName() . $block->getStateString() . $block->getNBTString(),
@@ -39,7 +39,8 @@ abstract class BlockDisplayAnimation extends Animation
     }
 
     /**
+     * @param Block $block
      * @return string
      */
-    abstract protected function getInitialTransform(): string;
+    abstract protected function getInitialTransform(Block $block): string;
 }

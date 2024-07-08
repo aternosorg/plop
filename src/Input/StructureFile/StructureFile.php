@@ -57,7 +57,7 @@ class StructureFile extends Input
         $blocksData = $tag->getList("blocks", TagType::TAG_Compound);
         $entitiesData = $tag->getList("entities", TagType::TAG_Compound);
 
-        if (!$size || count($size) !== 3 || !$paletteData || !$blocksData || !$entitiesData) {
+        if (!$size || count($size) !== 3 || !$paletteData || !$blocksData) {
             throw new InvalidArgumentException("Invalid Structure File NBT data.");
         }
 
@@ -71,11 +71,13 @@ class StructureFile extends Input
         }
 
         $entities = [];
-        foreach ($entitiesData as $entityTag) {
-            if (!$entityTag instanceof CompoundTag) {
-                throw new InvalidArgumentException("Invalid Structure File NBT data.");
+        if ($entitiesData !== null) {
+            foreach ($entitiesData as $entityTag) {
+                if (!$entityTag instanceof CompoundTag) {
+                    throw new InvalidArgumentException("Invalid Structure File NBT data.");
+                }
+                $entities[] = Entity::fromNbt($entityTag);
             }
-            $entities[] = Entity::fromNbt($entityTag);
         }
 
         return new static(
