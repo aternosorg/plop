@@ -7,7 +7,6 @@ use Aternos\Plop\Animation\DropAnimation;
 use Aternos\Plop\Animation\FloatAnimation;
 use Aternos\Plop\Animation\GrowAnimation;
 use Aternos\Plop\Animation\PlopAnimation;
-use Aternos\Plop\Animation\ThrowAnimation;
 use Aternos\Plop\Placement\AxisPlacementStrategy;
 use Aternos\Plop\Placement\FullPlacementStrategy;
 use Aternos\Plop\Placement\PlacementStrategy;
