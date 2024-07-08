@@ -8,6 +8,7 @@ use Aternos\Plop\Placement\AxisPlacementStrategy;
 use Aternos\Plop\Placement\FullPlacementStrategy;
 use Aternos\Plop\Placement\PlacementStrategy;
 use Aternos\Plop\Placement\RandomPlacementStrategy;
+use Aternos\Plop\Placement\SameMaterialPlacementStrategy;
 use Aternos\Plop\Placement\Util\Axis;
 use Aternos\Plop\Placement\Util\AxisStrategy;
 
@@ -20,6 +21,7 @@ class Presets
             "random" => new RandomPlacementStrategy(),
             "xzy" => new AxisPlacementStrategy([Axis::X, Axis::Z, Axis::Y]),
             "random-y" => new AxisPlacementStrategy([Axis::X, Axis::Z, Axis::Y], x: AxisStrategy::RANDOM, z: AxisStrategy::RANDOM, elementsPerTick: 2),
+            "same-material" => new SameMaterialPlacementStrategy(2),
             default => throw new \InvalidArgumentException("Unknown placement strategy preset: " . $preset),
         };
     }
