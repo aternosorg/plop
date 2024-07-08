@@ -3,6 +3,7 @@
 namespace Aternos\Plop;
 
 use Aternos\Plop\Animation\Animation;
+use Aternos\Plop\Animation\DropAnimation;
 use Aternos\Plop\Animation\PlopAnimation;
 use Aternos\Plop\Placement\AxisPlacementStrategy;
 use Aternos\Plop\Placement\FullPlacementStrategy;
@@ -31,6 +32,7 @@ class Presets
         return match ($preset) {
             "none", null => null,
             "plop" => new PlopAnimation(),
+            "drop" => new DropAnimation(),
             default => throw new \InvalidArgumentException("Unknown animation preset: " . $preset),
         };
     }
