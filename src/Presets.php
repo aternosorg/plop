@@ -37,7 +37,6 @@ class Presets
             "plop" => new PlopAnimation(),
             "drop" => new DropAnimation(),
             "grow" => new GrowAnimation(),
-            "throw" => new ThrowAnimation(),
             "float" => new FloatAnimation(),
             default => throw new \InvalidArgumentException("Unknown animation preset: " . $preset),
         };
