@@ -7,6 +7,11 @@ use Aternos\Plop\Animation\Animation;
 class Block extends AnimatableElement
 {
     const string TAG = "block";
+    const array AIR = [
+        "minecraft:air",
+        "minecraft:void_air",
+        "minecraft:cave_air"
+    ];
 
     public function __construct(string $name, float $x, float $y, float $z, ?string $nbt = null, protected array $state = [])
     {
@@ -47,9 +52,20 @@ class Block extends AnimatableElement
         return new ElementCommandList(["setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()]);
     }
 
+    /**
+     * @return bool
+     */
     public function isAir(): bool
     {
-        return $this->getName() === "minecraft:air";
+        return in_array($this->getName(), static::AIR);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStructureVoid(): bool
+    {
+        return $this->getName() === "minecraft:structure_void";
     }
 
     /**

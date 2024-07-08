@@ -8,6 +8,7 @@ use Aternos\Plop\Structure\Structure;
 abstract class PlacementStrategy
 {
     protected bool $ignoreAir = true;
+    protected bool $replaceStructureVoid = true;
     protected Structure $structure;
 
     /**
@@ -19,9 +20,23 @@ abstract class PlacementStrategy
     {
         $elements = [];
         foreach ($this->structure->getElements() as $element) {
-            if ($element instanceof Block && $element->isAir()) {
-                continue;
+            if ($element instanceof Block) {
+                if ($this->ignoreAir && $element->isAir()) {
+                    continue;
+                }
+
+                if ($this->replaceStructureVoid && $element->isStructureVoid()) {
+                    $element = new Block(
+                        $element->getName(),
+                        $element->getX(),
+                        $element->getY(),
+                        $element->getZ(),
+                        $element->getNBTString(),
+                        $element->getState()
+                    );
+                }
             }
+
             $elements[] = $element;
         }
         return $elements;
@@ -34,6 +49,16 @@ abstract class PlacementStrategy
     public function setIgnoreAir(bool $ignoreAir = true): static
     {
         $this->ignoreAir = $ignoreAir;
+        return $this;
+    }
+
+    /**
+     * @param bool $replaceStructureVoid
+     * @return $this
+     */
+    public function setReplaceStructureVoid(bool $replaceStructureVoid = true): static
+    {
+        $this->replaceStructureVoid = $replaceStructureVoid;
         return $this;
     }
 
