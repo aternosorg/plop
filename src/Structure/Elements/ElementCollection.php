@@ -7,32 +7,41 @@ use Generator;
 
 class ElementCollection
 {
-    protected array $elements = [];
-
     /**
      * @param Element[] $input
+     * @return static
      */
-    public function __construct(array $input)
+    public static function fromArray(array $input): ElementCollection
     {
+        $elements = [];
         foreach ($input as $element) {
             $x = intval($element->getX());
             $y = intval($element->getY());
             $z = intval($element->getZ());
 
-            if (!isset($this->elements[$x])) {
-                $this->elements[$x] = [];
+            if (!isset($elements[$x])) {
+                $elements[$x] = [];
             }
 
-            if (!isset($this->elements[$x][$y])) {
-                $this->elements[$x][$y] = [];
+            if (!isset($elements[$x][$y])) {
+                $elements[$x][$y] = [];
             }
 
-            if (!isset($this->elements[$x][$y][$z])) {
-                $this->elements[$x][$y][$z] = [$element];
+            if (!isset($elements[$x][$y][$z])) {
+                $elements[$x][$y][$z] = [$element];
             } else {
-                $this->elements[$x][$y][$z][] = $element;
+                $elements[$x][$y][$z][] = $element;
             }
         }
+
+        return new static($elements);
+    }
+
+    /**
+     * @param Element[][][][] $elements
+     */
+    private function __construct(protected array $elements)
+    {
     }
 
     /**
@@ -82,6 +91,16 @@ class ElementCollection
     }
 
     /**
+     * @param Element $element
+     * @param int $distance
+     * @return Generator<Element>
+     */
+    public function getAdjacentToElement(Element $element, int $distance): Generator
+    {
+        return $this->getAdjacent(intval($element->getX()), intval($element->getY()), intval($element->getZ()), $distance);
+    }
+
+    /**
      * @return Generator<Element>
      */
     public function getAll(): Generator
@@ -95,5 +114,32 @@ class ElementCollection
                 }
             }
         }
+    }
+
+    /**
+     * @param Element $element
+     * @return bool
+     */
+    public function remove(Element $element): bool
+    {
+        $x = intval($element->getX());
+        $y = intval($element->getY());
+        $z = intval($element->getZ());
+
+        $index = array_search($element, $this->elements[$x][$y][$z]);
+        if ($index === false) {
+            return false;
+        }
+
+        unset($this->elements[$x][$y][$z][$index]);
+        return true;
+    }
+
+    /**
+     * @return static
+     */
+    public function clone(): static
+    {
+        return new static($this->elements);
     }
 }

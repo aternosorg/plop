@@ -7,7 +7,6 @@ use Aternos\Plop\Structure\Elements\ElementCollection;
 
 class SameMaterialPlacementStrategy extends PlacementStrategy
 {
-    protected array $placed = [];
     protected ElementCollection $elements;
 
     /**
@@ -23,18 +22,18 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
     public function getPlacements(): array
     {
         $placements = [];
-        $this->elements = new ElementCollection($this->getElements());
-        $this->placed = [];
+        $this->elements = ElementCollection::fromArray($this->getElements());
         $i = 0;
 
         while ($start = $this->findStartingPoint()) {
             $found = $this->propagate($start);
             array_unshift($found, $start);
-            array_push($this->placed, ...$found);
             while (count($found) > 0) {
                 $placement = new Placement([], $i++);
                 for ($j = 0; $j < $this->elementsPerTick && count($found) > 0; $j++) {
-                    $placement->addElement(array_shift($found));
+                    $element = array_shift($found);
+                    $placement->addElement($element);
+                    $this->elements->remove($element);
                 }
                 $placements[] = $placement;
             }
@@ -50,7 +49,7 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
      */
     protected function propagate(Element $start, array $found = []): array
     {
-        foreach ($this->elements->getAdjacent(intval($start->getX()), intval($start->getY()), intval($start->getZ()), 1) as $element) {
+        foreach ($this->elements->getAdjacentToElement($start, 1) as $element) {
             if (in_array($element, $found)) {
                 continue;
             }
@@ -84,10 +83,10 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
         $minY = PHP_INT_MAX;
         $lowest = [];
         foreach ($this->elements->getAll() as $element) {
-            if ($element->getY() < $minY && !in_array($element, $this->placed)) {
+            if ($element->getY() < $minY) {
                 $minY = $element->getY();
                 $lowest = [$element];
-            } elseif ($element->getY() === $minY && !in_array($element, $this->placed)) {
+            } elseif ($element->getY() === $minY) {
                 $lowest[] = $element;
             }
         }
