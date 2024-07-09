@@ -15,6 +15,6 @@
         }
     ],
     "require": {
-        "aternos/nbt": "^1.11"
+        "aternos/nbt": "^1.11.1"
     }
 }

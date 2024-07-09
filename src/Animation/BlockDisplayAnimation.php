@@ -2,11 +2,40 @@
 
 namespace Aternos\Plop\Animation;
 
+use Aternos\Nbt\Tag\CompoundTag;
+use Aternos\Nbt\Tag\ListTag;
+use Aternos\Nbt\Tag\StringTag;
 use Aternos\Plop\Structure\Elements\Block;
 use Aternos\Plop\Structure\Elements\ElementCommandList;
 
 abstract class BlockDisplayAnimation extends Animation
 {
+    /**
+     * @param array $input
+     * @return string
+     */
+    public static function encodeSNBTStringList(array $input): string
+    {
+        $list = new ListTag();
+        foreach ($input as $item) {
+            $list[] = (new StringTag())->setValue($item);
+        }
+        return $list->toSNBT();
+    }
+
+    /**
+     * @param string[] $input
+     * @return string
+     */
+    public static function encodeSNBTStringCompound(array $input): string
+    {
+        $compound = new CompoundTag();
+        foreach ($input as $key => $item) {
+            $compound[$key] = (new StringTag())->setValue($item);
+        }
+        return $compound->toSNBT();
+    }
+
     /**
      * @param int $animationDuration
      */
@@ -30,7 +59,7 @@ abstract class BlockDisplayAnimation extends Animation
         ];
 
         return new ElementCommandList([
-            'summon minecraft:block_display ~' . number_format($x, 1) . ' ~' . number_format($y, 1) . ' ~' . number_format($z, 1) . ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration . ',Tags:' . json_encode($tags) . ',transformation:' . $this->getInitialTransform($block) . ',block_state:{Name:' . json_encode($block->getName()) . ', Properties:' . json_encode($block->getState()) . '}}'
+            'summon minecraft:block_display ~' . number_format($x, 1) . ' ~' . number_format($y, 1) . ' ~' . number_format($z, 1) . ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration . ',Tags:' . static::encodeSNBTStringList($tags) . ',transformation:' . $this->getInitialTransform($block) . ',block_state:{Name:' . StringTag::encodeSNBTString($block->getName()) . ', Properties:' . static::encodeSNBTStringCompound($block->getState()) . '}}'
         ], [
             'execute as @e[tag=' . $tag . ',scores={' . $objective . '=1}] run data merge entity @s {start_interpolation:0,transformation:{translation:[0f,0f,0f],scale:[0.999f,0.999f,0.999f]}}',
             'execute as @e[tag=' . $tag . ',scores={' . $objective . '=' . $this->animationDuration . '..}] run setblock ' . $block->getRelativeCoordinatesString() . " " . $block->getName() . $block->getStateString() . $block->getNBTString(),

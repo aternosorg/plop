@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c539e14aabc6250cb582c293a54dc3cc",
+    "content-hash": "dad1fb234e8cb9ac4a5ccb213cc72b24",
     "packages": [
         {
             "name": "aternos/nbt",
-            "version": "v1.11.0",
+            "version": "v1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aternosorg/php-nbt.git",
-                "reference": "255c5ad55c9712346b660fb3613436833633d30d"
+                "reference": "e9afc03613216aba60a800af02d15518b45fa362"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aternosorg/php-nbt/zipball/255c5ad55c9712346b660fb3613436833633d30d",
-                "reference": "255c5ad55c9712346b660fb3613436833633d30d",
+                "url": "https://api.github.com/repos/aternosorg/php-nbt/zipball/e9afc03613216aba60a800af02d15518b45fa362",
+                "reference": "e9afc03613216aba60a800af02d15518b45fa362",
                 "shasum": ""
             },
             "require": {
@@ -47,9 +47,9 @@
             "description": "PHP library to parse, modify, and create NBT objects",
             "support": {
                 "issues": "https://github.com/aternosorg/php-nbt/issues",
-                "source": "https://github.com/aternosorg/php-nbt/tree/v1.11.0"
+                "source": "https://github.com/aternosorg/php-nbt/tree/v1.11.1"
             },
-            "time": "2024-07-05T13:23:08+00:00"
+            "time": "2024-07-09T11:03:23+00:00"
         },
         {
             "name": "pocketmine/binaryutils",
