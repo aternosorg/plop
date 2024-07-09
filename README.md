@@ -39,7 +39,7 @@ php plop.php <input> [--function|-f <function>] [--output|-o <output>] [--animat
 | `--placement` | `-p` | The placement strategy preset to use, e.g. 'xzy'. Defaults to placing everything at once or 'full'. |
 
 Available animation presets are `none`, `plop`, `drop`, `grow`, and `float`.  
-Available placement strategy presets are `full`, `random`, `xyz`, `random-y` and `same-material`.  
+Available placement strategy presets are `full`, `random`, `xzy`, `random-y` and `same-material`.  
 
 To customize placement strategies and animations, use the library directly.
 
