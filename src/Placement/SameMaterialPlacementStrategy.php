@@ -3,11 +3,12 @@
 namespace Aternos\Plop\Placement;
 
 use Aternos\Plop\Structure\Elements\Element;
+use Aternos\Plop\Structure\Elements\ElementCollection;
 
 class SameMaterialPlacementStrategy extends PlacementStrategy
 {
     protected array $placed = [];
-    protected array $elements = [];
+    protected ElementCollection $elements;
 
     /**
      * @param int $elementsPerTick
@@ -22,7 +23,7 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
     public function getPlacements(): array
     {
         $placements = [];
-        $this->elements = $this->getElements();
+        $this->elements = new ElementCollection($this->getElements());
         $this->placed = [];
         $i = 0;
 
@@ -49,8 +50,8 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
      */
     protected function propagate(Element $start, array $found = []): array
     {
-        foreach ($this->elements as $element) {
-            if ($element === $start || in_array($element, $found) || in_array($element, $this->placed)){
+        foreach ($this->elements->getAdjacent(intval($start->getX()), intval($start->getY()), intval($start->getZ()), 1) as $element) {
+            if (in_array($element, $found)) {
                 continue;
             }
             if ($element->getName() === $start->getName() && $this->isElementNextTo($start, $element)) {
@@ -82,14 +83,11 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
     {
         $minY = PHP_INT_MAX;
         $lowest = [];
-        foreach ($this->elements as $element) {
-            if (in_array($element, $this->placed)) {
-                continue;
-            }
-            if ($element->getY() < $minY) {
+        foreach ($this->elements->getAll() as $element) {
+            if ($element->getY() < $minY && !in_array($element, $this->placed)) {
                 $minY = $element->getY();
                 $lowest = [$element];
-            } elseif ($element->getY() === $minY) {
+            } elseif ($element->getY() === $minY && !in_array($element, $this->placed)) {
                 $lowest[] = $element;
             }
         }
