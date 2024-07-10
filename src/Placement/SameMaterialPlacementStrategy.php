@@ -53,25 +53,12 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
             if (in_array($element, $found)) {
                 continue;
             }
-            if ($element->getName() === $start->getName() && $this->isElementNextTo($start, $element)) {
+            if ($element->getName() === $start->getName()) {
                 $found[] = $element;
                 $found = $this->propagate($element, $found);
             }
         }
         return $found;
-    }
-
-    /**
-     * @param Element $element
-     * @param Element $other
-     * @param float $distance
-     * @return bool
-     */
-    protected function isElementNextTo(Element $element, Element $other, float $distance = 1.1): bool
-    {
-        return abs($element->getX() - $other->getX()) +
-            abs($element->getY() - $other->getY()) +
-            abs($element->getZ() - $other->getZ()) <= $distance;
     }
 
 
