@@ -41,6 +41,12 @@ foreach ($argv as $i => $arg) {
         continue;
     }
 
+    if ($currentOption !== null) {
+        $options[$currentOption] = $arg;
+        $currentOption = null;
+        continue;
+    }
+
     if (str_starts_with($arg, "--")) {
         $option = substr($arg, 2);
         if (!array_key_exists($option, $options)) {
@@ -59,17 +65,12 @@ foreach ($argv as $i => $arg) {
         continue;
     }
 
-    if ($currentOption === null) {
-        if ($currentArgument >= count($arguments)) {
-            fatalError("Too many arguments");
-        }
-
-        $arguments[array_keys($arguments)[$currentArgument]] = $arg;
-        $currentArgument++;
-    } else {
-        $options[$currentOption] = $arg;
-        $currentOption = null;
+    if ($currentArgument >= count($arguments)) {
+        fatalError("Too many arguments");
     }
+
+    $arguments[array_keys($arguments)[$currentArgument]] = $arg;
+    $currentArgument++;
 }
 
 if ($arguments["input"] === null) {

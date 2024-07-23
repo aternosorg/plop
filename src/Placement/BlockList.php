@@ -28,7 +28,7 @@ class BlockList
             return static::getDefault();
         }
         $allow = true;
-        if (str_starts_with($blockList, "!")) {
+        if (str_starts_with($blockList, "~")) {
             $allow = false;
             $blockList = substr($blockList, 1);
         }

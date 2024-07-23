@@ -37,7 +37,7 @@ php plop.php <input> [--function|-f <function>] [--output|-o <output>] [--animat
 | `--output`    | `-o` | The output file to save the generated function to, outputs to STDOUT if not set                     |
 | `--animation` | `-a` | The animation preset to use, e.g. 'plop'. Defaults to no animation.                                 |
 | `--placement` | `-p` | The placement strategy preset to use, e.g. 'xzy'. Defaults to placing everything at once or 'full'. |
-| `--blocks`    | `-b` | List of blocks to filter for, start your list with ! to disallow this list of blocks.               |
+| `--blocks`    | `-b` | List of blocks to filter for, start your list with ~ to disallow this list of blocks.               |
 
 Available animation presets are `none`, `plop`, `drop`, `grow`, and `float`.  
 Available placement strategy presets are `full`, `random`, `xzy`, `random-y` and `same-material`.  
