@@ -46,13 +46,12 @@ abstract class BlockDisplayAnimation extends Animation
     /**
      * @inheritDoc
      */
-    public function getBlockCommands(Block $block, string $prefix): ElementCommandList
+    public function getBlockCommands(Block $block, string $prefix, int $tick): ElementCommandList
     {
         $x = $block->getX();
         $y = $block->getY();
         $z = $block->getZ();
         $tag = $prefix . $block::TAG . "_" . $x . "_" . $y . "_" . $z;
-        $objective = $prefix . $block::TAG;
         $tags = [
             $prefix . $block::TAG,
             $tag
@@ -61,10 +60,15 @@ abstract class BlockDisplayAnimation extends Animation
         return new ElementCommandList([
             'summon minecraft:block_display ~' . number_format($x, 1) . ' ~' . number_format($y, 1) . ' ~' . number_format($z, 1) . ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration . ',Tags:' . static::encodeSNBTStringList($tags) . ',transformation:' . $this->getInitialTransform($block) . ',block_state:{Name:' . StringTag::encodeSNBTString($block->getName()) . ', Properties:' . static::encodeSNBTStringCompound($block->getState()) . '}}'
         ], [
-            'execute as @e[tag=' . $tag . ',scores={' . $objective . '=1}] run data merge entity @s {start_interpolation:0,transformation:{translation:[0f,0f,0f],scale:[0.999f,0.999f,0.999f]}}',
-            'execute as @e[tag=' . $tag . ',scores={' . $objective . '=' . $this->animationDuration . '..}] run setblock ' . $block->getRelativeCoordinatesString() . " " . $block->getName() . $block->getStateString() . $block->getNBTString(),
-            'execute as @e[tag=' . $tag . ',scores={' . $objective . '=' . $this->animationDuration + 1 . '..}] run kill @s',
+            $this->storageIf($prefix, $tick + 1) . 'as @e[tag=' . $tag . ',limit=1] run data merge entity @s {start_interpolation:0,transformation:{translation:[0f,0f,0f],scale:[0.999f,0.999f,0.999f]}}',
+            $this->storageIf($prefix, $tick + $this->animationDuration) . 'as @e[tag=' . $tag . ',limit=1] at @s run setblock ~ ~ ~ ' . $block->getName() . $block->getStateString() . $block->getNBTString(),
+            $this->storageIf($prefix, $tick + $this->animationDuration + 1) . 'as @e[tag=' . $tag . ',limit=1] run kill @s',
         ]);
+    }
+
+    protected function storageIf(string $prefix, int $tick): string
+    {
+        return "execute if data storage plop:" . $prefix . "storage {Tick:" . $tick . "} ";
     }
 
     /**

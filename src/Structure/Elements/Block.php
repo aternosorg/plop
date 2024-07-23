@@ -44,10 +44,10 @@ class Block extends AnimatableElement
         return $this->nbt ?? "";
     }
 
-    public function getCommands(string $prefix): ElementCommandList
+    public function getCommands(string $prefix, int $tick): ElementCommandList
     {
         if ($this->animation !== null) {
-            return $this->animation->getBlockCommands($this, $prefix);
+            return $this->animation->getBlockCommands($this, $prefix, $tick);
         }
         return new ElementCommandList(["setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()]);
     }

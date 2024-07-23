@@ -80,5 +80,5 @@ abstract class Element
         return "~" . $this->x . " ~" . $this->y . " ~" . $this->z;
     }
 
-    abstract public function getCommands(string $prefix): ElementCommandList;
+    abstract public function getCommands(string $prefix, int $tick): ElementCommandList;
 }

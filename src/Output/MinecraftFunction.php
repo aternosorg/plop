@@ -38,9 +38,9 @@ class MinecraftFunction extends Output
 
         $this
             ->add($headerPrefix . $this->createScoreboard($this->getMainScoreBoardName()))
-            ->add($headerPrefix . $this->createScoreboard($this->getBlockEntityScoreBoardName()))
             ->add($headerPrefix . 'execute align xyz run summon minecraft:marker ~ ~ ~ {Tags:["' . $this->getMainEntityTag() . '"]}')
             ->add("execute as @e[tag=" . $this->getMainEntityTag() . "] unless score @s " . $this->getMainScoreBoardName() . " matches 0.. run scoreboard players set @s " . $this->getMainScoreBoardName() . " 0")
+            ->add("execute store result storage " . $this->getStorageName() . " Tick int 1 run scoreboard players get @e[tag=" . $this->getMainEntityTag() . ",limit=1] " . $this->getMainScoreBoardName())
             ->doubleLineBreak();
 
         return $this;
@@ -49,15 +49,15 @@ class MinecraftFunction extends Output
     public function addPlacement(Placement $placement): static
     {
         foreach ($placement->getElements() as $element) {
-            $asEntity = 'execute as @e[tag=' . $this->getMainEntityTag() . '] at @s ';
-            $startIf = 'if score @s ' . $this->getMainScoreBoardName() . ' matches ' . $placement->getTick() . ' ';
+            $asEntity = 'as @e[tag=' . $this->getMainEntityTag() . ',limit=1] at @s ';
+            $startIf = 'if data storage ' . $this->getStorageName() .  ' {Tick:' . $placement->getTick() . '} ';
 
-            $commandList = $element->getCommands($this->plop->getPrefix());
+            $commandList = $element->getCommands($this->plop->getPrefix(), $placement->getTick());
             foreach ($commandList->getStartCommands() as $command) {
-                $this->add($asEntity . $startIf . "run " . $command);
+                $this->add("execute " . $startIf . $asEntity . "run " . $command);
             }
             foreach ($commandList->getRunCommands() as $command) {
-                $this->add($asEntity . "run " . $command);
+                $this->add($command);
             }
             $this->lineBreak();
         }
@@ -72,10 +72,9 @@ class MinecraftFunction extends Output
         $this->lineBreak()
             ->add('execute unless entity @e[tag=' . $this->getBlockEntityTag() . '] if score @e[tag=' . $this->getMainEntityTag() . ',limit=1] ' . $this->getMainScoreBoardName() . ' matches ' . $this->getMaxTick() . '.. run tag @e[tag=' . $this->getMainEntityTag() . '] add ' . $this->getFinishedEntityTag())
             ->add($footerRunningPrefix . 'scoreboard players add @e[tag=' . $this->getMainEntityTag() . '] ' . $this->getMainScoreBoardName() . ' 1')
-            ->add($footerRunningPrefix . 'scoreboard players add @e[tag=' . $this->getBlockEntityTag() . '] ' . $this->getBlockEntityScoreBoardName() . ' 1')
             ->add($footerRunningPrefix . 'schedule function ' . $this->plop->getFunctionName() . ' 1t')
             ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getMainScoreBoardName())
-            ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getBlockEntityScoreBoardName())
+            ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Tick')
             ->add($footerEndedPrefix. 'kill @e[tag=' . $this->getMainEntityTag() . ']');
 
         return $this;
@@ -126,14 +125,14 @@ class MinecraftFunction extends Output
         return $this->getMainEntityTag();
     }
 
+    protected function getStorageName(): string
+    {
+        return "plop:" . $this->plop->getPrefix() . "storage";
+    }
+
     protected function getBlockEntityTag(): string
     {
         return $this->plop->getPrefix() . Block::TAG;
-    }
-
-    protected function getBlockEntityScoreBoardName(): string
-    {
-        return $this->getBlockEntityTag();
     }
 
     protected function createScoreboard(string $name): string
