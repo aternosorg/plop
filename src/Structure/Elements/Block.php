@@ -77,4 +77,12 @@ class Block extends AnimatableElement
         $this->animation = $animation;
         return $this;
     }
+
+    /**
+     * @return $this
+     */
+    public function clone(): static
+    {
+        return new static($this->name, $this->x, $this->y, $this->z, $this->nbt, $this->state);
+    }
 }

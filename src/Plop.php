@@ -6,6 +6,7 @@ use Aternos\Plop\Animation\Animation;
 use Aternos\Plop\Input\Input;
 use Aternos\Plop\Output\MinecraftFunction;
 use Aternos\Plop\Output\Output;
+use Aternos\Plop\Placement\BlockList;
 use Aternos\Plop\Placement\FullPlacementStrategy;
 use Aternos\Plop\Placement\PlacementStrategy;
 use Aternos\Plop\Structure\Structure;
@@ -20,7 +21,8 @@ class Plop
         protected ?PlacementStrategy $placementStrategy = null,
         protected ?Output $output = null,
         protected ?string $prefix = null,
-        protected ?Animation $defaultAnimation = null
+        protected ?Animation $defaultAnimation = null,
+        protected ?BlockList $blockList = null
     )
     {
         $this->structure = $input->getStructure();
@@ -29,7 +31,7 @@ class Plop
 
     public function generate(): static
     {
-        $this->getPlacementStrategy()->setStructure($this->structure);
+        $this->getPlacementStrategy()->setStructure($this->structure)->setBlockList($this->blockList);
         $this->getOutput()->setPlop($this)->generate();
         return $this;
     }
@@ -76,7 +78,7 @@ class Plop
     public function getPrefix(): string
     {
         if (!$this->prefix) {
-            $this->prefix = "plop_" . str_replace(":", "_", $this->functionName) . "_";
+            $this->prefix = "plop_" . str_replace([":", "/"], "_", $this->functionName) . "_";
         }
         return $this->prefix;
     }

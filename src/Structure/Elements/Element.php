@@ -45,6 +45,36 @@ abstract class Element
         return $this->z;
     }
 
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setX(float $x): static
+    {
+        $this->x = $x;
+        return $this;
+    }
+
+    public function setY(float $y): static
+    {
+        $this->y = $y;
+        return $this;
+    }
+
+    public function setZ(float $z): static
+    {
+        $this->z = $z;
+        return $this;
+    }
+
+    public function setNbt(?string $nbt): static
+    {
+        $this->nbt = $nbt;
+        return $this;
+    }
+
     public function getRelativeCoordinatesString(): string
     {
         return "~" . $this->x . " ~" . $this->y . " ~" . $this->z;

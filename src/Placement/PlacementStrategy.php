@@ -10,30 +10,42 @@ abstract class PlacementStrategy
     protected bool $ignoreAir = true;
     protected bool $replaceStructureVoid = true;
     protected Structure $structure;
+    protected ?BlockList $blockList = null;
 
     /**
      * @return Placement[]
      */
     abstract public function getPlacements(): array;
 
+    /**
+     * @param BlockList|null $blockList
+     * @return $this
+     */
+    public function setBlockList(?BlockList $blockList): static
+    {
+        $this->blockList = $blockList;
+        return $this;
+    }
+
+    /**
+     * @return BlockList
+     */
+    protected function getBlockList(): BlockList
+    {
+        return $this->blockList ?? $this->blockList = BlockList::getDefault();
+    }
+
     protected function getElements(): array
     {
         $elements = [];
         foreach ($this->structure->getElements() as $element) {
             if ($element instanceof Block) {
-                if ($this->ignoreAir && $element->isAir()) {
+                if (!$this->getBlockList()->isAllowed($element)) {
                     continue;
                 }
 
                 if ($this->replaceStructureVoid && $element->isStructureVoid()) {
-                    $element = new Block(
-                        $element->getName(),
-                        $element->getX(),
-                        $element->getY(),
-                        $element->getZ(),
-                        $element->getNBTString(),
-                        $element->getState()
-                    );
+                    $element = $element->clone()->setName("minecraft:air");
                 }
             }
 
