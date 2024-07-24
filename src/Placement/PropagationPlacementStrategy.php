@@ -14,10 +14,11 @@ class PropagationPlacementStrategy extends PlacementStrategy
     protected array $placedElements = [];
 
     public function __construct(
-        public int $perTick = 1,
-        public int $x = 0,
-        public int $y = 0,
-        public int $z = 0
+        public int   $perTick = 1,
+        public int   $x = 0,
+        public int   $y = 0,
+        public int   $z = 0,
+        public float $threshold = 0.5
     )
     {
     }
@@ -77,10 +78,11 @@ class PropagationPlacementStrategy extends PlacementStrategy
         $lowestWeight = null;
         $elements = [];
         foreach ($this->getWeightedElements() as $weightedElement) {
-            if ($lowestWeight === null || $weightedElement->getWeight() < $lowestWeight) {
+            if ($lowestWeight === null || $weightedElement->getWeight() < $lowestWeight - $this->threshold) {
                 $lowestWeight = $weightedElement->getWeight();
                 $elements = [$weightedElement->getElement()];
-            } elseif ($weightedElement->getWeight() === $lowestWeight) {
+            } elseif ($weightedElement->getWeight() >= $lowestWeight - $this->threshold
+                && $weightedElement->getWeight() <= $lowestWeight + $this->threshold) {
                 $elements[] = $weightedElement->getElement();
             }
         }
