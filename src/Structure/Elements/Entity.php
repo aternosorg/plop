@@ -8,6 +8,6 @@ class Entity extends Element
 {
     public function getCommands(string $prefix): array
     {
-        return [new TimedCommand("summon " . $this->getName() . " " . $this->getRelativeCoordinatesString() . " " . ($this->nbt ?? ""))];
+        return [new TimedCommand("summon " . $this->getName() . " " . $this->getRelativeCoordinatesString() . " " . ($this->nbt ?? ""), positioned: true)];
     }
 }

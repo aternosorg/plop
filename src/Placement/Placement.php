@@ -42,6 +42,14 @@ class Placement
         return $this->elements;
     }
 
+    /**
+     * @return int
+     */
+    public function getElementCount(): int
+    {
+        return count($this->elements);
+    }
+
     public function getTick(): int
     {
         return $this->tick;

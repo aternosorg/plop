@@ -52,7 +52,7 @@ It is also possible to extend Plop to support custom animation types and placeme
 ```php
 
 $input = \Aternos\Plop\Input\StructureFile\StructureFile::loadFile("something.nbt");
-$strategy = new \Aternos\Plop\Placement\SameMaterialPlacementStrategy(elementsPerTick: 3);
+$strategy = new \Aternos\Plop\Placement\SameMaterialPlacementStrategy(perTick: 3);
 $animation = new \Aternos\Plop\Animation\FloatAnimation(animationDuration: 25, x: -10, y: 6, z: -10);
 
 $plop = new \Aternos\Plop\Plop(

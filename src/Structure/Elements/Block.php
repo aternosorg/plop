@@ -58,7 +58,7 @@ class Block extends AnimatableElement
         if ($this->animation !== null) {
             return $this->animation->getBlockCommands($this, $prefix);
         }
-        return [new TimedCommand("setblock " . $this->getRelativeCoordinatesString() . " " . $this->getDefinition())];
+        return [new TimedCommand("setblock " . $this->getRelativeCoordinatesString() . " " . $this->getDefinition(), positioned: true)];
     }
 
     /**

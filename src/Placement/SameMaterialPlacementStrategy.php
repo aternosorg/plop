@@ -10,9 +10,9 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
     protected ElementCollection $elements;
 
     /**
-     * @param int $elementsPerTick
+     * @param int $perTick
      */
-    public function __construct(protected int $elementsPerTick = 1)
+    public function __construct(public int $perTick = 1)
     {
     }
 
@@ -30,7 +30,7 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
             array_unshift($found, $start);
             while (count($found) > 0) {
                 $placement = new Placement([], $i++);
-                for ($j = 0; $j < $this->elementsPerTick && count($found) > 0; $j++) {
+                for ($j = 0; $j < $this->perTick && count($found) > 0; $j++) {
                     $element = array_shift($found);
                     $placement->addElement($element);
                     $this->elements->remove($element);

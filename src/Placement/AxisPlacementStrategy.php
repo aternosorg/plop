@@ -14,7 +14,7 @@ class AxisPlacementStrategy extends PlacementStrategy
         protected ?AxisStrategy $x = null,
         protected ?AxisStrategy $y = null,
         protected ?AxisStrategy $z = null,
-        protected int $elementsPerTick = 1
+        public int $perTick = 1
     )
     {
     }
@@ -42,7 +42,7 @@ class AxisPlacementStrategy extends PlacementStrategy
             shuffle($equalElements);
             foreach ($equalElements as $equalElement) {
                 $placementElements[] = $equalElement;
-                if (count($placementElements) >= $this->elementsPerTick) {
+                if (count($placementElements) >= $this->perTick) {
                     $placements[] = new Placement($placementElements, $tick);
                     $placementElements = [];
                     $tick++;

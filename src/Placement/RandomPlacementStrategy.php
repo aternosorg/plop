@@ -2,11 +2,9 @@
 
 namespace Aternos\Plop\Placement;
 
-use Aternos\Plop\Structure\Elements\Block;
-
 class RandomPlacementStrategy extends PlacementStrategy
 {
-    public function __construct(protected int $elementsPerTick = 1)
+    public function __construct(public int $perTick = 1)
     {
     }
 
@@ -24,7 +22,7 @@ class RandomPlacementStrategy extends PlacementStrategy
         foreach ($elements as $element) {
             $placements[] = new Placement([$element], $tick);
             $elementsInTick++;
-            if ($elementsInTick >= $this->elementsPerTick) {
+            if ($elementsInTick >= $this->perTick) {
                 $elementsInTick = 0;
                 $tick++;
             }

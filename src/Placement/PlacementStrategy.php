@@ -8,7 +8,7 @@ use Aternos\Plop\Structure\Structure;
 abstract class PlacementStrategy
 {
     protected bool $ignoreAir = true;
-    protected bool $replaceStructureVoid = true;
+    public bool $replaceStructureVoid = true;
     protected Structure $structure;
     protected ?BlockList $blockList = null;
 
