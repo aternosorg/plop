@@ -40,9 +40,12 @@ php plop.php <input> [--function|-f <function>] [--output|-o <output>] [--animat
 | `--blocks`    | `-b` | List of blocks to filter for, start your list with ~ to disallow this list of blocks.               |
 
 Available animation presets are `none`, `plop`, `drop`, `grow`, and `float`.  
-Available placement strategy presets are `full`, `random`, `xzy`, `random-y` and `same-material`.  
+Available placement strategy presets are `full`, `random`, `xzy`, `random-y`, `propagation` and `same-material`.
 
-To customize placement strategies and animations, use the library directly.
+You can set some parameters for placement strategies using `[key=value]` directly after the placement strategy, it might be necessary
+to use quotes around the whole argument to prevent the shell from interpreting the parameters, e.g. `random[perTick=3]`.
+
+To customize placement strategies and animations further, use the library directly.
 
 ### Library
 
