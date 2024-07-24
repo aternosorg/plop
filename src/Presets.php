@@ -22,7 +22,7 @@ class Presets
     {
         $strategyString = $preset;
         $parameters = [];
-        if ($strategyString && preg_match('/^(\w+)\[([^]]*)]$/', $strategyString, $matches)) {
+        if ($strategyString && preg_match('/^([\w-]+)\[([^]]*)]$/', $strategyString, $matches)) {
             $strategyString = $matches[1];
             $parameterString = $matches[2];
             foreach (explode(",", $parameterString) as $parameter) {
