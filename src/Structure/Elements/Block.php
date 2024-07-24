@@ -3,6 +3,7 @@
 namespace Aternos\Plop\Structure\Elements;
 
 use Aternos\Plop\Animation\Animation;
+use Aternos\Plop\Output\TimedCommand;
 
 class Block extends AnimatableElement
 {
@@ -44,12 +45,20 @@ class Block extends AnimatableElement
         return $this->nbt ?? "";
     }
 
-    public function getCommands(string $prefix, int $tick): ElementCommandList
+    /**
+     * @return string
+     */
+    public function getDefinition(): string
+    {
+        return $this->name . $this->getStateString() . $this->getNBTString();
+    }
+
+    public function getCommands(string $prefix): array
     {
         if ($this->animation !== null) {
-            return $this->animation->getBlockCommands($this, $prefix, $tick);
+            return $this->animation->getBlockCommands($this, $prefix);
         }
-        return new ElementCommandList(["setblock " . $this->getRelativeCoordinatesString() . " " . $this->name . $this->getStateString() . $this->getNBTString()]);
+        return [new TimedCommand("setblock " . $this->getRelativeCoordinatesString() . " " . $this->getDefinition())];
     }
 
     /**

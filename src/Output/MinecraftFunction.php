@@ -49,15 +49,14 @@ class MinecraftFunction extends Output
     public function addPlacement(Placement $placement): static
     {
         foreach ($placement->getElements() as $element) {
-            $asEntity = 'as @e[tag=' . $this->getMainEntityTag() . ',limit=1] at @s ';
-            $startIf = 'if data storage ' . $this->getStorageName() .  ' {Tick:' . $placement->getTick() . '} ';
-
-            $commandList = $element->getCommands($this->plop->getPrefix(), $placement->getTick());
-            foreach ($commandList->getStartCommands() as $command) {
-                $this->add("execute " . $startIf . $asEntity . "run " . $command);
-            }
-            foreach ($commandList->getRunCommands() as $command) {
-                $this->add($command);
+            $commandList = $element->getCommands($this->plop->getPrefix());
+            foreach ($commandList as $command) {
+                $result = 'execute if data storage ' . $this->getStorageName() .  ' {Tick:' . $placement->getTick() + $command->getTimeOffset() . '} ';
+                if ($command->shouldBePositioned()) {
+                    $result .= 'at @e[tag=' . $this->getMainEntityTag() . ',limit=1] ';
+                }
+                $result .= 'run ' . $command->getCommand();
+                $this->add($result);
             }
             $this->lineBreak();
         }

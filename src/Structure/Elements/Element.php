@@ -2,6 +2,7 @@
 
 namespace Aternos\Plop\Structure\Elements;
 
+use Aternos\Plop\Output\TimedCommand;
 use Aternos\Plop\Placement\Util\Axis;
 
 abstract class Element
@@ -75,10 +76,17 @@ abstract class Element
         return $this;
     }
 
-    public function getRelativeCoordinatesString(): string
+    public function getRelativeCoordinatesString(bool $forceFloat = false): string
     {
+        if ($forceFloat) {
+            return "~" . number_format($this->x, 1) . " ~" . number_format($this->y, 1) . " ~" . number_format($this->z, 1);
+        }
         return "~" . $this->x . " ~" . $this->y . " ~" . $this->z;
     }
 
-    abstract public function getCommands(string $prefix, int $tick): ElementCommandList;
+    /**
+     * @param string $prefix
+     * @return TimedCommand[]
+     */
+    abstract public function getCommands(string $prefix): array;
 }

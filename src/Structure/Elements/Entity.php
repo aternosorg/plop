@@ -2,10 +2,12 @@
 
 namespace Aternos\Plop\Structure\Elements;
 
+use Aternos\Plop\Output\TimedCommand;
+
 class Entity extends Element
 {
-    public function getCommands(string $prefix, int $tick): ElementCommandList
+    public function getCommands(string $prefix): array
     {
-        return new ElementCommandList(["summon " . $this->getName() . " " . $this->getRelativeCoordinatesString() . " " . ($this->nbt ?? "")]);
+        return [new TimedCommand("summon " . $this->getName() . " " . $this->getRelativeCoordinatesString() . " " . ($this->nbt ?? ""))];
     }
 }

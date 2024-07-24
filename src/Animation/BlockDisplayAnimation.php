@@ -5,8 +5,8 @@ namespace Aternos\Plop\Animation;
 use Aternos\Nbt\Tag\CompoundTag;
 use Aternos\Nbt\Tag\ListTag;
 use Aternos\Nbt\Tag\StringTag;
+use Aternos\Plop\Output\TimedCommand;
 use Aternos\Plop\Structure\Elements\Block;
-use Aternos\Plop\Structure\Elements\ElementCommandList;
 
 abstract class BlockDisplayAnimation extends Animation
 {
@@ -46,7 +46,7 @@ abstract class BlockDisplayAnimation extends Animation
     /**
      * @inheritDoc
      */
-    public function getBlockCommands(Block $block, string $prefix, int $tick): ElementCommandList
+    public function getBlockCommands(Block $block, string $prefix): array
     {
         $x = $block->getX();
         $y = $block->getY();
@@ -57,18 +57,19 @@ abstract class BlockDisplayAnimation extends Animation
             $tag
         ];
 
-        return new ElementCommandList([
-            'summon minecraft:block_display ~' . number_format($x, 1) . ' ~' . number_format($y, 1) . ' ~' . number_format($z, 1) . ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration . ',Tags:' . static::encodeSNBTStringList($tags) . ',transformation:' . $this->getInitialTransform($block) . ',block_state:{Name:' . StringTag::encodeSNBTString($block->getName()) . ', Properties:' . static::encodeSNBTStringCompound($block->getState()) . '}}'
-        ], [
-            $this->storageIf($prefix, $tick + 1) . 'as @e[tag=' . $tag . ',limit=1] run data merge entity @s {start_interpolation:0,transformation:{translation:[0f,0f,0f],scale:[0.999f,0.999f,0.999f]}}',
-            $this->storageIf($prefix, $tick + $this->animationDuration) . 'as @e[tag=' . $tag . ',limit=1] at @s run setblock ~ ~ ~ ' . $block->getName() . $block->getStateString() . $block->getNBTString(),
-            $this->storageIf($prefix, $tick + $this->animationDuration + 1) . 'as @e[tag=' . $tag . ',limit=1] run kill @s',
-        ]);
-    }
-
-    protected function storageIf(string $prefix, int $tick): string
-    {
-        return "execute if data storage plop:" . $prefix . "storage {Tick:" . $tick . "} ";
+        return [
+            new TimedCommand(
+                'summon minecraft:block_display ' . $block->getRelativeCoordinatesString(true) .
+                ' {shadow_strength:0f,interpolation_duration:' . $this->animationDuration .
+                ',Tags:' . static::encodeSNBTStringList($tags) .
+                ',transformation:' . $this->getInitialTransform($block) .
+                ',block_state:{Name:' . StringTag::encodeSNBTString($block->getName()) .
+                ', Properties:' . static::encodeSNBTStringCompound($block->getState()) . '}}',
+                positioned: true),
+            new TimedCommand('execute as @e[tag=' . $tag . ',limit=1] run data merge entity @s {start_interpolation:0,transformation:{translation:[0f,0f,0f],scale:[0.999f,0.999f,0.999f]}}', 1),
+            new TimedCommand('setblock ' . $block->getRelativeCoordinatesString() . ' ' . $block->getDefinition(), $this->animationDuration, true),
+            new TimedCommand('execute as @e[tag=' . $tag . ',limit=1] run kill @s', $this->animationDuration + 1),
+        ];
     }
 
     /**
