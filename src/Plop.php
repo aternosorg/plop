@@ -103,4 +103,37 @@ class Plop
         $this->structure->setDefaultAnimation($defaultAnimation);
         return $this;
     }
+
+    public function getStructure(): Structure
+    {
+        return $this->structure;
+    }
+
+    public function setStructure(Structure $structure): static
+    {
+        $this->structure = $structure;
+        return $this;
+    }
+
+    public function getInput(): Input
+    {
+        return $this->input;
+    }
+
+    public function setInput(Input $input): static
+    {
+        $this->input = $input;
+        return $this;
+    }
+
+    public function getBlockList(): ?BlockList
+    {
+        return $this->blockList;
+    }
+
+    public function setBlockList(?BlockList $blockList): static
+    {
+        $this->blockList = $blockList;
+        return $this;
+    }
 }
