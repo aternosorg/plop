@@ -8,6 +8,7 @@ use Aternos\Plop\Output\TimedCommand;
 class Block extends AnimatableElement
 {
     const string TAG = "block";
+    const string STRUCTURE_VOID = "minecraft:structure_void";
     const array AIR = [
         "minecraft:air",
         "minecraft:void_air",
@@ -74,7 +75,7 @@ class Block extends AnimatableElement
      */
     public function isStructureVoid(): bool
     {
-        return $this->getName() === "minecraft:structure_void";
+        return $this->getName() === static::STRUCTURE_VOID;
     }
 
     /**

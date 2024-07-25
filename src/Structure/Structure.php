@@ -5,6 +5,7 @@ namespace Aternos\Plop\Structure;
 use Aternos\Plop\Animation\Animation;
 use Aternos\Plop\Placement\Util\Axis;
 use Aternos\Plop\Structure\Elements\AnimatableElement;
+use Aternos\Plop\Structure\Elements\Block;
 use Aternos\Plop\Structure\Elements\Element;
 
 class Structure
@@ -17,6 +18,7 @@ class Structure
         protected int $sizeZ
     )
     {
+        $this->findAndAddStructureVoids();
     }
 
     public function addElement(Element $element): void
@@ -60,6 +62,33 @@ class Structure
                 $element->setAnimation($animation);
             }
         }
+        return $this;
+    }
+
+    public function findAndAddStructureVoids(): static
+    {
+        $allPositions = [];
+        for ($x = 0; $x < $this->getSizeX(); $x++) {
+            for ($y = 0; $y < $this->getSizeY(); $y++) {
+                for ($z = 0; $z < $this->getSizeZ(); $z++) {
+                    $allPositions[] = [$x, $y, $z];
+                }
+            }
+        }
+
+        $existingPositions = [];
+        foreach ($this->getElements() as $element) {
+            if (!$element instanceof Block) {
+                continue;
+            }
+            $existingPositions[] = [$element->getX(), $element->getY(), $element->getZ()];
+        }
+
+        $missingPositions = array_diff($allPositions, $existingPositions);
+        foreach ($missingPositions as $missingPosition) {
+            $this->addElement(new Block(Block::STRUCTURE_VOID, $missingPosition[0], $missingPosition[1], $missingPosition[2]));
+        }
+
         return $this;
     }
 }
