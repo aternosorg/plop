@@ -18,7 +18,6 @@ class Structure
         protected int $sizeZ
     )
     {
-        $this->findAndAddStructureVoids();
     }
 
     public function addElement(Element $element): void
@@ -67,26 +66,28 @@ class Structure
 
     public function findAndAddStructureVoids(): static
     {
-        $allPositions = [];
-        for ($x = 0; $x < $this->getSizeX(); $x++) {
-            for ($y = 0; $y < $this->getSizeY(); $y++) {
-                for ($z = 0; $z < $this->getSizeZ(); $z++) {
-                    $allPositions[] = [$x, $y, $z];
-                }
-            }
-        }
-
-        $existingPositions = [];
+        $indexedElements = [];
         foreach ($this->getElements() as $element) {
             if (!$element instanceof Block) {
                 continue;
             }
-            $existingPositions[] = [$element->getX(), $element->getY(), $element->getZ()];
+            if (!isset($indexedElements[(int)$element->getX()])) {
+                $indexedElements[(int)$element->getX()] = [];
+            }
+            if (!isset($indexedElements[(int)$element->getX()][(int)$element->getY()])) {
+                $indexedElements[(int)$element->getX()][(int)$element->getY()] = [];
+            }
+            $indexedElements[(int)$element->getX()][(int)$element->getY()][(int)$element->getZ()] = $element;
         }
 
-        $missingPositions = array_diff($allPositions, $existingPositions);
-        foreach ($missingPositions as $missingPosition) {
-            $this->addElement(new Block(Block::STRUCTURE_VOID, $missingPosition[0], $missingPosition[1], $missingPosition[2]));
+        for ($x = 0; $x < $this->getSizeX(); $x++) {
+            for ($y = 0; $y < $this->getSizeY(); $y++) {
+                for ($z = 0; $z < $this->getSizeZ(); $z++) {
+                    if (!isset($indexedElements[$x][$y][$z])) {
+                        $this->addElement(new Block(Block::STRUCTURE_VOID, $x, $y, $z));
+                    }
+                }
+            }
         }
 
         return $this;

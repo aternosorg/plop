@@ -25,8 +25,9 @@ class Plop
         protected ?BlockList $blockList = null
     )
     {
-        $this->structure = $input->getStructure();
-        $this->structure->setDefaultAnimation($defaultAnimation);
+        $this->structure = $input->getStructure()
+            ->findAndAddStructureVoids()
+            ->setDefaultAnimation($defaultAnimation);
     }
 
     public function generate(): static
