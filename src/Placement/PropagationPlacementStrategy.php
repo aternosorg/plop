@@ -25,7 +25,6 @@ class PropagationPlacementStrategy extends PlacementStrategy
 
     public function getPlacements(): array
     {
-        $placements = [];
         $this->availableElements = $this->getElements();
 
         $startElement = $this->findStartElement();
@@ -35,17 +34,7 @@ class PropagationPlacementStrategy extends PlacementStrategy
             $this->placeElement($element);
         }
 
-        $tick = 0;
-        $placement = new Placement();
-        foreach ($this->placedElements as $element) {
-            $placement->addElement($element);
-            if ($placement->getElementCount() >= $this->perTick) {
-                $placements[] = $placement;
-                $placement = new Placement(tick: ++$tick);
-            }
-        }
-
-        return $placements;
+        return $this->generatePlacements($this->placedElements, $this->perTick);
     }
 
     /**

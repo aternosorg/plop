@@ -16,17 +16,6 @@ class RandomPlacementStrategy extends PlacementStrategy
         $elements = $this->getElements();
         shuffle($elements);
 
-        $placements = [];
-        $tick = 0;
-        $elementsInTick = 0;
-        foreach ($elements as $element) {
-            $placements[] = new Placement([$element], $tick);
-            $elementsInTick++;
-            if ($elementsInTick >= $this->perTick) {
-                $elementsInTick = 0;
-                $tick++;
-            }
-        }
-        return $placements;
+        return $this->generatePlacements($elements, $this->perTick);
     }
 }

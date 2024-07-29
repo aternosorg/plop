@@ -21,37 +21,30 @@ class AxisPlacementStrategy extends PlacementStrategy
 
     public function getPlacements(): array
     {
-        $placements = [];
         $elements = $this->getElements();
         usort($elements, function ($a, $b) {
             return $this->compareElements($a, $b);
         });
-        $tick = 0;
-        $equalElements = [];
-        $placementElements = [];
+
+        $orderedElements = [];
+        $currentEqualBatch = [];
         foreach ($elements as $element) {
-            if (empty($equalElements)) {
-                $equalElements[] = $element;
+            if (empty($currentEqualBatch)) {
+                $currentEqualBatch[] = $element;
                 continue;
             }
-            if ($this->compareElements($equalElements[0], $element) === 0) {
-                $equalElements[] = $element;
+            if ($this->compareElements($currentEqualBatch[0], $element) === 0) {
+                $currentEqualBatch[] = $element;
                 continue;
             }
 
-            shuffle($equalElements);
-            foreach ($equalElements as $equalElement) {
-                $placementElements[] = $equalElement;
-                if (count($placementElements) >= $this->perTick) {
-                    $placements[] = new Placement($placementElements, $tick);
-                    $placementElements = [];
-                    $tick++;
-                }
-            }
-            $equalElements = [$element];
+            shuffle($currentEqualBatch);
+            $orderedElements = array_merge($orderedElements, $currentEqualBatch);
         }
-        $placements[] = new Placement(array_merge($placementElements, $equalElements), $tick);
-        return $placements;
+        shuffle($currentEqualBatch);
+        $orderedElements = array_merge($orderedElements, $currentEqualBatch);
+
+        return $this->generatePlacements($orderedElements, $this->perTick);
     }
 
     protected function compareElements(Element $a, Element $b): int

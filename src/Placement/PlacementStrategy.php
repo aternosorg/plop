@@ -3,6 +3,7 @@
 namespace Aternos\Plop\Placement;
 
 use Aternos\Plop\Structure\Elements\Block;
+use Aternos\Plop\Structure\Elements\Element;
 use Aternos\Plop\Structure\Structure;
 
 abstract class PlacementStrategy
@@ -25,6 +26,29 @@ abstract class PlacementStrategy
     {
         $this->blockList = $blockList;
         return $this;
+    }
+
+    /**
+     * @param Element[] $elements
+     * @param int $perTick
+     * @return Placement[]
+     */
+    protected function generatePlacements(array $elements, int $perTick = 1): array
+    {
+        $tick = 0;
+        $placements = [];
+        $placement = new Placement();
+        foreach ($elements as $element) {
+            $placement->addElement($element);
+            if ($placement->getElementCount() >= $perTick) {
+                $placements[] = $placement;
+                $placement = new Placement(tick: ++$tick);
+            }
+        }
+        if ($placement->getElementCount() > 0) {
+            $placements[] = $placement;
+        }
+        return $placements;
     }
 
     /**
