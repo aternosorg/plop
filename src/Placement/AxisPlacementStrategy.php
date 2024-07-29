@@ -40,6 +40,7 @@ class AxisPlacementStrategy extends PlacementStrategy
 
             shuffle($currentEqualBatch);
             $orderedElements = array_merge($orderedElements, $currentEqualBatch);
+            $currentEqualBatch = [$element];
         }
         shuffle($currentEqualBatch);
         $orderedElements = array_merge($orderedElements, $currentEqualBatch);
