@@ -10,9 +10,10 @@ class Entity
 {
     /**
      * @param CompoundTag $tag
-     * @return static
+     * @return Entity|null
+     * @throws \Exception
      */
-    public static function fromNbt(CompoundTag $tag): static
+    public static function fromNbt(CompoundTag $tag): ?static
     {
         $pos = $tag->getList("pos", TagType::TAG_Double);
         $blockPos = $tag->getList("blockPos", TagType::TAG_Int);
@@ -20,7 +21,7 @@ class Entity
         $id = $nbt->getString("id")?->getValue();
 
         if ($pos === null || count($pos) !== 3 || $blockPos === null || count($blockPos) !== 3 || $nbt === null || !is_string($id)) {
-            throw new InvalidArgumentException("Invalid Entity NBT data: " . $tag->toSNBT());
+            return null;
         }
 
         $nbt->offsetUnset("UUID");

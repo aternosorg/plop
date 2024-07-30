@@ -76,7 +76,11 @@ class StructureFile extends Input
                 if (!$entityTag instanceof CompoundTag) {
                     throw new InvalidArgumentException("Invalid Structure File NBT data.");
                 }
-                $entities[] = Entity::fromNbt($entityTag);
+                $entity = Entity::fromNbt($entityTag);
+                if (!$entity) {
+                    continue;
+                }
+                $entities[] = $entity;
             }
         }
 
