@@ -21,25 +21,19 @@ class SameMaterialPlacementStrategy extends PlacementStrategy
      */
     public function getPlacements(): array
     {
-        $placements = [];
+        $resultElements = [];
         $this->elements = ElementCollection::fromArray($this->getElements());
-        $i = 0;
 
         while ($start = $this->findStartingPoint()) {
             $found = $this->propagate($start);
             array_unshift($found, $start);
-            while (count($found) > 0) {
-                $placement = new Placement([], $i++);
-                for ($j = 0; $j < $this->perTick && count($found) > 0; $j++) {
-                    $element = array_shift($found);
-                    $placement->addElement($element);
-                    $this->elements->remove($element);
-                }
-                $placements[] = $placement;
+            foreach ($found as $element) {
+                $resultElements[] = $element;
+                $this->elements->remove($element);
             }
         }
 
-        return $placements;
+        return $this->generatePlacements($resultElements, $this->perTick);
     }
 
     /**
