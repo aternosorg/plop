@@ -76,7 +76,7 @@ class MinecraftFunction extends Output
         $footerEndedPrefix = 'execute if data storage ' . $this->getStorageName() .  ' {Finished:1b} run ';
 
         $this->lineBreak()
-            ->add('execute if data storage ' . $this->getStorageName() .  ' {Tick:' . $this->maxTick. '} run data storage merge ' . $this->getStorageName() . ' {Finished:1b}')
+            ->add('execute if data storage ' . $this->getStorageName() .  ' {Tick:' . $this->maxTick. '} run data merge storage ' . $this->getStorageName() . ' {Finished:1b}')
             ->add($footerRunningPrefix . 'scoreboard players add @e[tag=' . $this->getMainEntityTag() . '] ' . $this->getMainScoreBoardName() . ' 1')
             ->add($footerRunningPrefix . 'schedule function ' . $this->plop->getFunctionName() . ' 1t')
             ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getMainScoreBoardName())
