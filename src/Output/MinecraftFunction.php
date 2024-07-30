@@ -8,6 +8,8 @@ use Aternos\Plop\Structure\Elements\Block;
 class MinecraftFunction extends Output
 {
     protected string $function = "";
+    protected int $maxTick = 0;
+
     /**
      * @var Placement[]
      */
@@ -34,12 +36,13 @@ class MinecraftFunction extends Output
 
     public function generateHeader(): static
     {
-        $headerPrefix = 'execute unless entity @e[tag=' . $this->getMainEntityTag() . '] run ';
+        $headerPrefix = 'execute unless data storage ' . $this->getStorageName() .  ' {Running:1b} run ';
 
         $this
             ->add($headerPrefix . $this->createScoreboard($this->getMainScoreBoardName()))
             ->add($headerPrefix . 'execute align xyz run summon minecraft:marker ~ ~ ~ {Tags:["' . $this->getMainEntityTag() . '"]}')
-            ->add("execute as @e[tag=" . $this->getMainEntityTag() . "] unless score @s " . $this->getMainScoreBoardName() . " matches 0.. run scoreboard players set @s " . $this->getMainScoreBoardName() . " 0")
+            ->add($headerPrefix . "execute as @e[tag=" . $this->getMainEntityTag() . "] unless score @s " . $this->getMainScoreBoardName() . " matches 0.. run scoreboard players set @s " . $this->getMainScoreBoardName() . " 0")
+            ->add($headerPrefix . 'data merge storage ' . $this->getStorageName() . ' {Running:1b}')
             ->add("execute store result storage " . $this->getStorageName() . " Tick int 1 run scoreboard players get @e[tag=" . $this->getMainEntityTag() . ",limit=1] " . $this->getMainScoreBoardName())
             ->doubleLineBreak();
 
@@ -51,7 +54,11 @@ class MinecraftFunction extends Output
         foreach ($placement->getElements() as $element) {
             $commandList = $element->getCommands($this->plop->getPrefix());
             foreach ($commandList as $command) {
-                $result = 'execute if data storage ' . $this->getStorageName() .  ' {Tick:' . $placement->getTick() + $command->getTimeOffset() . '} ';
+                $tick = $placement->getTick() + $command->getTimeOffset();
+                if ($tick > $this->maxTick) {
+                    $this->maxTick = $tick;
+                }
+                $result = 'execute if data storage ' . $this->getStorageName() .  ' {Tick:' . $tick . '} ';
                 if ($command->shouldBePositioned()) {
                     $result .= 'at @e[tag=' . $this->getMainEntityTag() . ',limit=1] ';
                 }
@@ -65,15 +72,17 @@ class MinecraftFunction extends Output
 
     public function generateFooter(): static
     {
-        $footerRunningPrefix = 'execute if entity @e[tag=' . $this->getMainEntityTag() . ',tag=!' . $this->getFinishedEntityTag() . '] run ';
-        $footerEndedPrefix = 'execute if entity @e[tag=' . $this->getMainEntityTag() . ',tag=' . $this->getFinishedEntityTag() . '] run ';
+        $footerRunningPrefix = 'execute unless data storage ' . $this->getStorageName() .  ' {Finished:1b} run ';
+        $footerEndedPrefix = 'execute if data storage ' . $this->getStorageName() .  ' {Finished:1b} run ';
 
         $this->lineBreak()
-            ->add('execute unless entity @e[tag=' . $this->getBlockEntityTag() . '] if score @e[tag=' . $this->getMainEntityTag() . ',limit=1] ' . $this->getMainScoreBoardName() . ' matches ' . $this->getMaxTick() . '.. run tag @e[tag=' . $this->getMainEntityTag() . '] add ' . $this->getFinishedEntityTag())
+            ->add('execute if data storage ' . $this->getStorageName() .  ' {Tick:' . $this->maxTick. '} run data storage merge ' . $this->getStorageName() . ' {Finished:1b}')
             ->add($footerRunningPrefix . 'scoreboard players add @e[tag=' . $this->getMainEntityTag() . '] ' . $this->getMainScoreBoardName() . ' 1')
             ->add($footerRunningPrefix . 'schedule function ' . $this->plop->getFunctionName() . ' 1t')
             ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getMainScoreBoardName())
+            ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Running')
             ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Tick')
+            ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Finished')
             ->add($footerEndedPrefix. 'kill @e[tag=' . $this->getMainEntityTag() . ']');
 
         return $this;
