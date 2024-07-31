@@ -30,8 +30,11 @@ class PropagationPlacementStrategy extends PlacementStrategy
         $startElement = $this->findStartElement();
         $this->placeElement($startElement);
 
-        while ($element = $this->getRandomElementWithLowestWeight()) {
-            $this->placeElement($element);
+        while ($elements = $this->getElementsWithLowestWeight()) {
+            shuffle($elements);
+            foreach ($elements as $element) {
+                $this->placeElement($element);
+            }
         }
 
         return $this->generatePlacements($this->placedElements, $this->perTick);
@@ -45,18 +48,6 @@ class PropagationPlacementStrategy extends PlacementStrategy
     {
         $this->placedElements[] = $element;
         $this->availableElements = array_filter($this->availableElements, fn($e) => $e !== $element);
-    }
-
-    /**
-     * @return Element|null
-     */
-    protected function getRandomElementWithLowestWeight(): ?Element
-    {
-        $elements = $this->getElementsWithLowestWeight();
-        if (empty($elements)) {
-            return null;
-        }
-        return $elements[array_rand($elements)];
     }
 
     /**
