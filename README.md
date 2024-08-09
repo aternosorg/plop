@@ -3,7 +3,7 @@ Generate Minecraft function files to make structures plop into existence in Vani
 
 ![plop](https://github.com/user-attachments/assets/28ec4c33-a8fc-40a9-8a08-7d6471d57ee9)
 
-Plop generates a single function file that works without any other dependencies.
+Plop uses a Vanilla structure file to generate a single function file that works without any other dependencies.
 
 ## Installation
 ### CLI
@@ -31,23 +31,28 @@ Plop includes a simple CLI to generate Minecraft function files using a handful 
 php plop.php <input> [--function|-f <function>] [--output|-o <output>] [--animation|-a <animation>] [--placement|-p <placement>]
 ```
 
+The only required argument is the path to your `<input>` structure file.
+
 #### Options
 
-| Option        |      | Description                                                                                         |
-|---------------|------|-----------------------------------------------------------------------------------------------------|
-| `--function`  | `-f` | The name of the Minecraft function to generate, e.g. plop:example                                   |
-| `--output`    | `-o` | The output file to save the generated function to, prints output to terminal if not set.            |
-| `--animation` | `-a` | The animation preset to use, e.g. 'plop'. Defaults to no animation.                                 |
-| `--placement` | `-p` | The placement strategy preset to use, e.g. 'xzy'. Defaults to placing everything at once or 'full'. |
-| `--blocks`    | `-b` | List of blocks to filter for, start your list with ~ to use all blocks except the listed blocks.    |
+Other available options are:
+
+| Option        | Short | Description                                                                                         |
+|---------------|-------|-----------------------------------------------------------------------------------------------------|
+| `--function`  | `-f`  | The name of the Minecraft function to generate, e.g. plop:example                                   |
+| `--output`    | `-o`  | The output file to save the generated function to, prints output to terminal if not set.            |
+| `--animation` | `-a`  | The animation preset to use, e.g. 'plop'. Defaults to no animation.                                 |
+| `--placement` | `-p`  | The placement strategy preset to use, e.g. 'xzy'. Defaults to placing everything at once or 'full'. |
+| `--blocks`    | `-b`  | List of blocks to filter for, start your list with ~ to use all blocks except the listed blocks.    |
 
 Available animation presets are `none`, `plop`, `drop`, `grow`, and `float`.  
 Available placement strategy presets are `full`, `random`, `xzy`, `random-y`, `propagation` and `same-material`.
 
-You can set some parameters for placement strategies using `[key=value]` directly after the placement strategy, it might be necessary
-to use quotes around the whole argument to prevent the shell from interpreting the parameters, e.g. `random[perTick=3]`.
+You can set some parameters for placement strategies and animations using `[key=value]` directly after the name, 
+it might be necessary to use quotes around the whole argument to prevent the shell from interpreting the parameters, 
+e.g. `-p 'random[perTick=3]'`.
 
-To customize placement strategies and animations further, use the library directly.
+To customize placement strategies and animations further, you can use the library directly.
 
 ### Library
 
