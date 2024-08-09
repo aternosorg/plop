@@ -1,7 +1,7 @@
 # Plop
 Generate Minecraft function files to make structures plop into existence in Vanilla Minecraft.
 
-[This could be a gif]
+![plop](https://github.com/user-attachments/assets/28ec4c33-a8fc-40a9-8a08-7d6471d57ee9)
 
 Plop generates a single function file that works without any other dependencies.
 
