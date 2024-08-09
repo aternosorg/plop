@@ -66,6 +66,7 @@ class Presets
             $parameterString = $matches[2];
             foreach (explode(",", $parameterString) as $parameter) {
                 $parts = explode("=", $parameter);
+                $parts = array_map("trim", $parts);
                 $key = array_shift($parts);
                 if (count($parts) === 0) {
                     $parameters[$key] = true;
