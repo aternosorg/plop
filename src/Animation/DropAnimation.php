@@ -7,12 +7,12 @@ use Aternos\Plop\Structure\Elements\Block;
 class DropAnimation extends BlockDisplayAnimation
 {
     /**
-     * @param int $animationDuration
-     * @param int $dropHeight
+     * @param int $duration
+     * @param int $height
      */
-    public function __construct(int $animationDuration = 30, protected int $dropHeight = 40)
+    public function __construct(int $duration = 30, protected int $height = 40)
     {
-        parent::__construct($animationDuration);
+        parent::__construct($duration);
     }
 
     /**
@@ -20,6 +20,6 @@ class DropAnimation extends BlockDisplayAnimation
      */
     protected function getInitialTransform(Block $block): string
     {
-        return '{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0.0f,' . $this->dropHeight . 'f,0.0f],scale:[0.0f,0.0f,0.0f]}';
+        return '{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0.0f,' . $this->height . 'f,0.0f],scale:[0.0f,0.0f,0.0f]}';
     }
 }

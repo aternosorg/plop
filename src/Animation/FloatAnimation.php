@@ -6,9 +6,9 @@ use Aternos\Plop\Structure\Elements\Block;
 
 class FloatAnimation extends BlockDisplayAnimation
 {
-    public function __construct(int $animationDuration = 20, protected int $x = 0, protected int $y = 0, protected int $z = 0)
+    public function __construct(int $duration = 20, public int $x = 0, public int $y = 0, public int $z = 0)
     {
-        parent::__construct($animationDuration);
+        parent::__construct($duration);
     }
 
     /**
