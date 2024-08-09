@@ -82,8 +82,8 @@ class MinecraftFunction extends Output
             ->add($footerEndedPrefix . 'scoreboard objectives remove ' . $this->getMainScoreBoardName())
             ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Running')
             ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Tick')
-            ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Finished')
-            ->add($footerEndedPrefix. 'kill @e[tag=' . $this->getMainEntityTag() . ']');
+            ->add($footerEndedPrefix. 'kill @e[tag=' . $this->getMainEntityTag() . ']')
+            ->add($footerEndedPrefix . 'data remove storage ' . $this->getStorageName() . ' Finished');
 
         return $this;
     }
