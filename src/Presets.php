@@ -40,7 +40,7 @@ class Presets
     {
          [$animationString, $parameters] = static::parseNameAndParameters($preset);
 
-        $animation = match ($preset) {
+        $animation = match ($animationString) {
             "none", null => null,
             "plop" => new PlopAnimation(),
             "drop" => new DropAnimation(),
