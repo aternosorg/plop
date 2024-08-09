@@ -81,6 +81,7 @@ Built-in placement strategies are:
  - `AxisPlacementStrategy`: Grows the structure along the specified axis (x, y, z) as defined by the `AxisStrategy`.
  - `RandomPlacementStrategy`: Places blocks randomly.
  - `SameMaterialPlacementStrategy`: Places blocks grouped by block/material type.
+ - `PropagationPlacementStrategy`: Places blocks propagating from one point.
 
 Additional placement strategies can be implemented by extending the `PlacementStrategy` class.
 
