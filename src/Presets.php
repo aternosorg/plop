@@ -77,8 +77,11 @@ class Presets
         return [$name, $parameters];
     }
 
-    static protected function applyParameters(object $object, array $parameters): void
+    static protected function applyParameters(?object $object, array $parameters): void
     {
+        if (!$object) {
+            return;
+        }
         foreach ($parameters as $key => $value) {
             if (property_exists($object, $key)) {
                 $object->$key = $value;
