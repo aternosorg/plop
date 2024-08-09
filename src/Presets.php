@@ -20,21 +20,7 @@ class Presets
 {
     static public function getPlacementStrategyPreset(?string $preset = null): PlacementStrategy
     {
-        $strategyString = $preset;
-        $parameters = [];
-        if ($strategyString && preg_match('/^([\w-]+)\[([^]]*)]$/', $strategyString, $matches)) {
-            $strategyString = $matches[1];
-            $parameterString = $matches[2];
-            foreach (explode(",", $parameterString) as $parameter) {
-                $parts = explode("=", $parameter);
-                $key = array_shift($parts);
-                if (count($parts) === 0) {
-                    $parameters[$key] = true;
-                } else {
-                    $parameters[$key] = implode("=", $parts);
-                }
-            }
-        }
+        [$strategyString, $parameters] = static::parseNameAndParameters($preset);
 
         $strategy = match ($strategyString) {
             "full", null => new FullPlacementStrategy(),
@@ -46,20 +32,15 @@ class Presets
             default => throw new \InvalidArgumentException("Unknown placement strategy preset: " . $preset),
         };
 
-        foreach ($parameters as $key => $value) {
-            if (property_exists($strategy, $key)) {
-                $strategy->$key = $value;
-            } else {
-                throw new \InvalidArgumentException("Unknown parameter for placement strategy preset: " . $key);
-            }
-        }
-
+        static::applyParameters($strategy, $parameters);
         return $strategy;
     }
 
     static public function getAnimationPreset(?string $preset = null): ?Animation
     {
-        return match ($preset) {
+         [$animationString, $parameters] = static::parseNameAndParameters($preset);
+
+        $animation = match ($preset) {
             "none", null => null,
             "plop" => new PlopAnimation(),
             "drop" => new DropAnimation(),
@@ -67,5 +48,43 @@ class Presets
             "float" => new FloatAnimation(),
             default => throw new \InvalidArgumentException("Unknown animation preset: " . $preset),
         };
+
+        static::applyParameters($animation, $parameters);
+        return $animation;
+    }
+
+    static protected function parseNameAndParameters(?string $preset): array
+    {
+        if (!$preset) {
+            return [null, []];
+        }
+
+        $name = $preset;
+        $parameters = [];
+        if (preg_match('/^([\w-]+)\[([^]]*)]$/', $name, $matches)) {
+            $name = $matches[1];
+            $parameterString = $matches[2];
+            foreach (explode(",", $parameterString) as $parameter) {
+                $parts = explode("=", $parameter);
+                $key = array_shift($parts);
+                if (count($parts) === 0) {
+                    $parameters[$key] = true;
+                } else {
+                    $parameters[$key] = implode("=", $parts);
+                }
+            }
+        }
+        return [$name, $parameters];
+    }
+
+    static protected function applyParameters(object $object, array $parameters): void
+    {
+        foreach ($parameters as $key => $value) {
+            if (property_exists($object, $key)) {
+                $object->$key = $value;
+            } else {
+                throw new \InvalidArgumentException("Unknown parameter: " . $key);
+            }
+        }
     }
 }
