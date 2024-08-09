@@ -10,7 +10,7 @@ class DropAnimation extends BlockDisplayAnimation
      * @param int $duration
      * @param int $height
      */
-    public function __construct(int $duration = 30, protected int $height = 40)
+    public function __construct(int $duration = 30, public int $height = 40)
     {
         parent::__construct($duration);
     }
