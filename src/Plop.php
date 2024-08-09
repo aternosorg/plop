@@ -6,9 +6,9 @@ use Aternos\Plop\Animation\Animation;
 use Aternos\Plop\Input\Input;
 use Aternos\Plop\Output\MinecraftFunction;
 use Aternos\Plop\Output\Output;
-use Aternos\Plop\Placement\BlockList;
 use Aternos\Plop\Placement\FullPlacementStrategy;
 use Aternos\Plop\Placement\PlacementStrategy;
+use Aternos\Plop\Placement\Util\BlockList;
 use Aternos\Plop\Structure\Structure;
 
 class Plop

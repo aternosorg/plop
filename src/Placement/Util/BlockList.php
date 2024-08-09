@@ -1,6 +1,6 @@
 <?php
 
-namespace Aternos\Plop\Placement;
+namespace Aternos\Plop\Placement\Util;
 
 use Aternos\Plop\Structure\Elements\Block;
 

@@ -1,7 +1,9 @@
 # Plop
-Generate Minecraft function files to make structures plop into existence.
+Generate Minecraft function files to make structures plop into existence in Vanilla Minecraft.
 
 [This could be a gif]
+
+Plop generates a single function file that works without any other dependencies.
 
 ## Installation
 ### CLI
@@ -34,10 +36,10 @@ php plop.php <input> [--function|-f <function>] [--output|-o <output>] [--animat
 | Option        |      | Description                                                                                         |
 |---------------|------|-----------------------------------------------------------------------------------------------------|
 | `--function`  | `-f` | The name of the Minecraft function to generate, e.g. plop:example                                   |
-| `--output`    | `-o` | The output file to save the generated function to, outputs to STDOUT if not set                     |
+| `--output`    | `-o` | The output file to save the generated function to, prints output to terminal if not set.            |
 | `--animation` | `-a` | The animation preset to use, e.g. 'plop'. Defaults to no animation.                                 |
 | `--placement` | `-p` | The placement strategy preset to use, e.g. 'xzy'. Defaults to placing everything at once or 'full'. |
-| `--blocks`    | `-b` | List of blocks to filter for, start your list with ~ to disallow this list of blocks.               |
+| `--blocks`    | `-b` | List of blocks to filter for, start your list with ~ to use all blocks except the listed blocks.    |
 
 Available animation presets are `none`, `plop`, `drop`, `grow`, and `float`.  
 Available placement strategy presets are `full`, `random`, `xzy`, `random-y`, `propagation` and `same-material`.

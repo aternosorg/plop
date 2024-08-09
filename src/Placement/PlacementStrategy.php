@@ -2,6 +2,7 @@
 
 namespace Aternos\Plop\Placement;
 
+use Aternos\Plop\Placement\Util\BlockList;
 use Aternos\Plop\Structure\Elements\Block;
 use Aternos\Plop\Structure\Elements\Element;
 use Aternos\Plop\Structure\Structure;
